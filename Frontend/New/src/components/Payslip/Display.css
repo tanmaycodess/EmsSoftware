@@ -1,0 +1,131 @@
+/* Display.css */
+
+.employee-payslips-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.employee-payslips-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-group select,
+.form-group .react-datepicker-wrapper {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #333;
+}
+
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.react-datepicker__input-container input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #333;
+}
+
+.payslips-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.payslips-table th,
+.payslips-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+    color: #333;
+}
+
+.payslips-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.payslips-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.payslips-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.payslips-table button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.payslips-table button:first-child {
+    margin-right: 10px;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.payslips-table button:first-child:hover {
+    background-color: #45a049;
+}
+
+.payslips-table button:last-child {
+    background-color: #f44336;
+    color: white;
+}
+
+.payslips-table button:last-child:hover {
+    background-color: #e53935;
+}
+
+.back {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.back:hover {
+    background-color: #007bb5;
+}
+
+h4 {
+    text-align: center;
+    margin-top: 20px;
+    color: #555;
+}

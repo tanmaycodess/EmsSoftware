@@ -1,0 +1,19 @@
+{
+    "builds": [
+        {
+            "src": "./index.js", 
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/.*",
+            "dest": "index.js",
+            "headers": {
+                    "Access-Control-Allow-Origin": "https://emsmongo.vercel.app",
+                    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                    "Access-Control-Allow-Headers": "Content-Type"
+            }
+        }
+    ]
+}

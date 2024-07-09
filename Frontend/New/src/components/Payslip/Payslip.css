@@ -1,0 +1,99 @@
+.payslip-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+}
+
+.content-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 900px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.content-container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.main-title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.payslip-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.label-row {
+    grid-column: span 2;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.form-group input,
+.form-group select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    transition: border 0.3s ease;
+    margin-right: 10px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
+}
+
+.generate-button {
+    grid-column: span 2;
+    padding: 14px 0;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 20px;
+}
+
+.generate-button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .payslip-form {
+        grid-template-columns: 1fr;
+    }
+
+    .generate-button {
+        grid-column: span 1;
+    }
+}

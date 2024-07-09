@@ -1,0 +1,161 @@
+/* Home.css */
+
+/* General Styles */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+}
+
+/* Home Page */
+.home-page {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background: linear-gradient(145deg, #343a40, #212529);
+    color: #fff;
+    transition: all 0.3s ease;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px;
+    background: #212529;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.sidebar-link {
+    display: block;
+    width: 100%;
+    padding: 15px 20px;
+    text-align: left;
+    background: none;
+    border: none;
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar-link:hover {
+    background-color: #495057;
+    transform: translateX(10px);
+}
+
+/* Main Content */
+.main-content {
+    flex-grow: 1;
+    margin-left: 0;
+    padding: 20px;
+    background-color: #f4f4f9;
+    transition: margin-left 0.3s ease, transform 0.3s ease;
+}
+
+.home-page.sidebar-open .main-content {
+    margin-left: 250px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #212529;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.open-nav-btn {
+    background: none;
+    border: none;
+    color: #4e4c4c;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.page-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #f4f4f9;
+}
+
+.content {
+    margin-top: 20px;
+    animation: fadeIn 0.5s ease;
+}
+
+h2 {
+    color: #333;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+/* Keyframes for Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        left: -100%;
+        width: 100%;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .main-content {
+        margin-left: 0;
+        transform: translateX(0);
+    }
+
+    .home-page.sidebar-open .main-content {
+        margin-left: 0;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .page-title {
+        margin-top: 10px;
+        font-size: 20px;
+    }
+}
