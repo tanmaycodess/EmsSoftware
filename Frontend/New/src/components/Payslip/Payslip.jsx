@@ -170,7 +170,7 @@ function Payslip() {
         formDataToUpload.append('payslip', pdfBlob, 'payslip.pdf');
 
         // Upload the PDF to the backend
-        axios.post('http://localhost:5000/payslip', formDataToUpload)
+        axios.post('https://emssoftware-backend.onrender.com/payslip', formDataToUpload)
             .then(response => {
                 Swal.fire({
                     icon: 'success',
