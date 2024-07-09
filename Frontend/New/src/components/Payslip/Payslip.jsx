@@ -204,7 +204,7 @@ function Payslip() {
                         >
                             <option value="">Select Employee</option>
                             {employees.map((employee) => (
-                                <option key={employee._id} value={employee.name}>
+                                <option key={employee.employeeId} value={employee.name}>
                                     {employee.name}
                                 </option>
                             ))}
@@ -216,28 +216,25 @@ function Payslip() {
                             type="text"
                             name="designation"
                             value={formData.designation}
-                            onChange={handleChange}
-                            disabled
+                            readOnly
                         />
                     </div>
                     <div className="form-group">
                         <label>Date of Joining:</label>
                         <input
-                            type="text"
+                            type="date"
                             name="dateOfJoining"
                             value={formData.dateOfJoining}
-                            onChange={handleChange}
-                            disabled
+                            readOnly
                         />
                     </div>
                     <div className="form-group">
                         <label>Pay Period:</label>
                         <input
-                            type="month"
+                            type="text"
                             name="payPeriod"
                             value={formData.payPeriod}
                             onChange={handleChange}
-                            required
                         />
                     </div>
                     <div className="form-group">
@@ -247,8 +244,7 @@ function Payslip() {
                             name="basicSalary"
                             value={formData.basicSalary}
                             onChange={handleChange}
-                            required
-                            disabled
+                            readOnly
                         />
                     </div>
                     <div className="form-group">
@@ -258,7 +254,6 @@ function Payslip() {
                             name="allowances"
                             value={formData.allowances}
                             onChange={handleChange}
-                            required
                         />
                     </div>
                     <div className="form-group">
@@ -268,7 +263,6 @@ function Payslip() {
                             name="otherBenefits"
                             value={formData.otherBenefits}
                             onChange={handleChange}
-                            required
                         />
                     </div>
                     <div className="form-group">
@@ -278,7 +272,6 @@ function Payslip() {
                             name="tds"
                             value={formData.tds}
                             onChange={handleChange}
-                            required
                         />
                     </div>
                     <div className="form-group">
@@ -288,7 +281,6 @@ function Payslip() {
                             name="otherDeductions"
                             value={formData.otherDeductions}
                             onChange={handleChange}
-                            required
                         />
                     </div>
                     <div className="form-group">
@@ -297,9 +289,7 @@ function Payslip() {
                             type="number"
                             name="netPay"
                             value={formData.netPay}
-                            onChange={handleChange}
-                            required
-                            disabled
+                            readOnly
                         />
                     </div>
                     <div className="form-group">
@@ -309,7 +299,6 @@ function Payslip() {
                             name="paidDays"
                             value={formData.paidDays}
                             onChange={handleChange}
-                            required
                         />
                     </div>
                     <div className="form-group">
@@ -319,12 +308,16 @@ function Payslip() {
                             name="lopDays"
                             value={formData.lopDays}
                             onChange={handleChange}
-                            required
                         />
                     </div>
-                    <button type="button" className="generate-button" onClick={generatePDF}>
-                        Generate Payslip
-                    </button>
+                    <div className="form-buttons">
+                        <button type="button" onClick={generatePDF}>
+                            Generate PDF
+                        </button>
+                        <button type="button" onClick={() => navigate('/')}>
+                            Back to Home
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
