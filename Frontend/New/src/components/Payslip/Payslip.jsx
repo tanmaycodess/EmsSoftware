@@ -26,7 +26,7 @@ function Payslip() {
     const [employees, setEmployees] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/employees')
+        axios.get('https://emssoftware-backend.onrender.com/employees')
             .then((response) => setEmployees(response.data))
             .catch((error) => console.error('Error fetching employees:', error));
     }, []);
