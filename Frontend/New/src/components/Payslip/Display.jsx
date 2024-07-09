@@ -49,7 +49,7 @@ function EmployeePayslips() {
             timer: 2000,
         });
 
-        axios.gethttps://emssoftware-backend.onrender.com/payslip/download/${payslipID}`, {
+        axios.get(`https://emssoftware-backend.onrender.com/payslip/download/${payslipID}`, {
             responseType: 'arraybuffer',
         })
             .then(response => {
