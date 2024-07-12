@@ -224,6 +224,10 @@ h2 {
     .main-content {
         margin-left: 0;
         transform: translateX(0);
+        max-height: calc(100vh - 60px);
+            /* Adjust based on header height */
+        overflow-y: auto;
+            /* Allow vertical scrolling */
     }
 
     .home-page.sidebar-open .main-content {
