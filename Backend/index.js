@@ -151,6 +151,63 @@ function generateTokenForUser(userEmail) {
     return token;
 }
 
+// Endpoint to get the total number of employees
+app.get('/total-employees', async (req, res) => {
+    try {
+        const totalEmployees = await Employee.countDocuments();
+        res.json({ total: totalEmployees });
+    } catch (err) {
+        res.status(500).json({ error: 'An error occurred while retrieving the total number of employees' });
+    }
+});
+
+// Endpoint to get the total number of Users
+app.get('/total-users', async (req, res) => {
+    try {
+        const totalUsers = await User.countDocuments({});
+        res.json({ total: totalUsers });
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching total users' });
+    }
+});
+
+// Endpoint to get the total number of Clients
+app.get('/total-clients', async (req, res) => {
+    try {
+        const totalClients = await Client.countDocuments({});
+        res.json({ total: totalClients });
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching total clients' });
+    }
+});
+
+// Endpoint to get the total number of Payslip
+app.get('/total-payslips', async (req, res) => {
+    try {
+        const totalPayslips = await Payslip.countDocuments({});
+        res.json({ total: totalPayslips });
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching total clients' });
+    }
+});
+
+
+// Route to calculate total salary
+app.get('/total-salary-spent', async (req, res) => {
+    try {
+        // Example calculation: Replace with your actual logic to sum up salaries
+        const totalSalarySpent = await Employee.aggregate([
+            { $group: { _id: null, totalSalarySpent: { $sum: '$salary' } } }
+        ]);
+
+        res.json({ totalSalarySpent: totalSalarySpent[0].totalSalarySpent });
+    } catch (err) {
+        console.error('Error fetching total salary spent:', err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+});
+
+
 // Endpoint for user login
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
