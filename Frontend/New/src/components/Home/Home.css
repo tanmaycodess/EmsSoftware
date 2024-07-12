@@ -1,5 +1,3 @@
-/* Home.css */
-
 /* General Styles */
 body {
     margin: 0;
@@ -116,6 +114,83 @@ h2 {
     font-weight: 600;
 }
 
+/* Card Styles */
+.card-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.card {
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    width: 23%;
+    min-width: 200px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card-header {
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.card-body {
+    padding: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.card-footer {
+    background-color: #f4f4f9;
+    padding: 10px;
+    font-size: 16px;
+    color: #007bff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.card-footer:hover {
+    background-color: #e2e6ea;
+}
+
+/* Specific Colors for Cards */
+.card.total-employees .card-header {
+    background-color: #4caf50;
+    /* Green */
+}
+
+.card.total-users .card-header {
+    background-color: #2196f3;
+    /* Blue */
+}
+
+.card.total-clients .card-header {
+    background-color: #ff9800;
+    /* Orange */
+}
+
+.card.total-payslips .card-header {
+    background-color: #f44336;
+    /* Red */
+}
+
+.card.total-salary-spent .card-header {
+    background-color: #9c27b0;
+    /* Purple */
+}
+
 /* Keyframes for Animations */
 @keyframes fadeIn {
     from {
@@ -130,6 +205,12 @@ h2 {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+    .card {
+        width: 45%;
+    }
+}
+
 @media (max-width: 768px) {
     .sidebar {
         left: -100%;
@@ -152,10 +233,40 @@ h2 {
     .header {
         flex-direction: column;
         align-items: flex-start;
+        padding: 15px;
+        background-color: #343a40;
+        color: #f4f4f9;
+    }
+
+    .open-nav-btn {
+        align-self: flex-end;
+        font-size: 28px;
     }
 
     .page-title {
         margin-top: 10px;
+        font-size: 22px;
+        color: #ffca28;
+    }
+
+    .content {
+        padding: 15px;
+        background-color: #e9ecef;
+        border-radius: 10px;
+    }
+
+    h2 {
         font-size: 20px;
+        color: #495057;
+    }
+
+    .card-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 80%;
+        margin-bottom: 20px;
     }
 }
