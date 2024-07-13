@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
 import './Home.css'; // Import your CSS file for styling
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const HomePage = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -48,10 +52,50 @@ const HomePage = () => {
         fetchTotalSalarySpent();
     }, []);
 
-
-    const openSidebar = () => {
-        setSidebarOpen(true);
+    const chartData = {
+        labels: ['Employees', 'Users', 'Clients', 'Payslips'],
+        datasets: [
+            {
+                label: 'Total Count',
+                data: [totalEmployees, totalUsers, totalClients, totalPayslips],
+                backgroundColor: ['#4caf50', '#2196f3', '#ff9800', '#f44336', '#9c27b0']
+            }
+        ]
     };
+
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Count'
+                }
+            }
+        },
+        plugins: {
+            datalabels: {
+                anchor: 'end',
+                align: 'top',
+                formatter: (value, context) => {
+                    return value.toLocaleString(); // Format the label as needed
+                },
+                font: {
+                    weight: 'bold'
+                }
+            }
+        }
+    };
+
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
+
+    // const openSidebar = () => {
+    //     setSidebarOpen(true);
+    // };
 
     const closeSidebar = () => {
         setSidebarOpen(false);
@@ -97,51 +141,78 @@ const HomePage = () => {
         navigate('/login');
     };
 
+
     return (
         <div className={`home-page ${sidebarOpen ? 'sidebar-open' : ''}`}>
-            {/* Sidebar */}
             <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
                 <div className="sidebar-header">
-                    <button className="sidebar-close-btn" onClick={closeSidebar}>&times;</button>
+                    <button className="sidebar-close-btn" onClick={toggleSidebar}>
+                        &times;
+                    </button>
                 </div>
-                <button className="sidebar-link" onClick={goToEmployeeManagement}>Manage Employee</button>
-                <button className="sidebar-link" onClick={goToProfile}>Employee Profile</button>
-                <button className="sidebar-link" onClick={goToRegister}>Manage User Auth</button>
-                <button className="sidebar-link" onClick={goToPayslip}>Generate Payslip</button>
-                <button className="sidebar-link" onClick={goToDisplay}>View Payslip</button>
-                <button className="sidebar-link" onClick={goToClient}>Client Management</button>
-                <button className="sidebar-link" onClick={goToClientProfile}>Client Profile</button>
-                <button className="sidebar-link" onClick={goToLogin}>Logout</button>
+                <button className="sidebar-link" onClick={goToEmployeeManagement}>
+                    Manage Employee
+                </button>
+                <button className="sidebar-link" onClick={goToProfile}>
+                    Employee Profile
+                </button>
+                <button className="sidebar-link" onClick={goToPayslip}>
+                    Generate Payslip
+                </button>
+                <button className="sidebar-link" onClick={goToDisplay}>
+                    View Payslip
+                </button>
+                <button className="sidebar-link" onClick={goToClient}>
+                    Manage Client
+                </button>
+                <button className="sidebar-link" onClick={goToClientProfile}>
+                    Client Profile
+                </button>
+                <button className="sidebar-link" onClick={goToRegister}>
+                    Manage User Auth
+                </button>
+                <button className="sidebar-link" onClick={goToLogin}>
+                    LogOut
+                </button>
             </div>
-
-            {/* Main Content */}
             <div className="main-content">
                 <div className="header">
-                    <button className="open-nav-btn" onClick={openSidebar}>&#9776;</button>
-                    <h1 className="page-title">Insansa's Dashboard</h1>
+                    <button className="open-nav-btn" onClick={toggleSidebar}>
+                        &#9776;
+                    </button>
+                    <h1 className="page-title">Insansa's Dasboard</h1>
                 </div>
                 <div className="content">
+                    <h2>Dashboard Overview</h2>
                     <div className="card-container">
                         <div className="card total-employees">
                             <div className="card-header">Total Employees</div>
                             <div className="card-body">{totalEmployees}</div>
+                           
                         </div>
                         <div className="card total-users">
                             <div className="card-header">Total Users</div>
                             <div className="card-body">{totalUsers}</div>
+                            
                         </div>
                         <div className="card total-clients">
                             <div className="card-header">Total Clients</div>
                             <div className="card-body">{totalClients}</div>
+                           
                         </div>
                         <div className="card total-payslips">
                             <div className="card-header">Total Payslips</div>
                             <div className="card-body">{totalPayslips}</div>
+                           
                         </div>
                         <div className="card total-salary-spent">
-                            <div className="card-header">Total Rupees Spent on Salaries</div>
-                            <div className="card-body"> &#x20B9; {totalSalarySpent}</div>
+                            <div className="card-header">Total Salary Spent</div>
+                            <div className="card-body">&#x20B9; {totalSalarySpent}</div>
+                           
                         </div>
+                    </div>
+                    <div className="chart-container">
+                        <Bar data={chartData} options={chartOptions} />
                     </div>
                 </div>
             </div>
