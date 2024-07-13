@@ -131,7 +131,7 @@ function Payslip() {
             startY: doc.lastAutoTable.finalY + 10,
             body: [
                 [`Net Pay`, `₹ ${formData.netPay}`],
-                [`Total Net Payable (Amount In Words)`, `${netPayInWords} rup only`],
+                [`Total Net Payable (Amount In Words)`, `${netPayInWords} rupees only`],
                 [`**Total Net Payable = Gross Earnings - Total Deductions - LOP Deduction`, ``]
             ],
             theme: 'plain',
