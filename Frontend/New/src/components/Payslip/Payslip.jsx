@@ -5,7 +5,7 @@ import 'jspdf-autotable';
 import './Payslip.css';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { toWords } from 'number-to-words'; // Import the library
+import { toWords } from 'number-to-words'; 
 
 function Payslip() {
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ function Payslip() {
     const [employees, setEmployees] = useState([]);
 
     useEffect(() => {
-        axios.get('https://emssoftware-backend.onrender.com/employees')
+        axios.get('http://localhost:5000/employees')
             .then((response) => setEmployees(response.data))
             .catch((error) => console.error('Error fetching employees:', error));
     }, []);
@@ -161,7 +161,7 @@ function Payslip() {
         formDataToUpload.append('payslip', pdfBlob, 'payslip.pdf');
 
         // Upload the PDF to the backend
-        axios.post('https://emssoftware-backend.onrender.com/payslip', formDataToUpload)
+        axios.post('http://localhost:5000/payslip', formDataToUpload)
             .then(response => {
                 Swal.fire({
                     icon: 'success',
