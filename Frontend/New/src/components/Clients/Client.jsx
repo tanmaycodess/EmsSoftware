@@ -40,54 +40,63 @@ const Client = () => {
         setNewClient({ ...newClient, [name]: value });
     };
 
-    const handleAddClient = async (e) => {
+    const handleAddClient = (e) => {
         e.preventDefault();
-        if (newClient.name.trim() === '' || newClient.email.trim() === '') {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Please enter client name and email.',
-            });
-            return;
-        }
-
-        try {
-            const response = await fetch('http://localhost:5000/clients', {
+        console.log(newClient); // Add this line
+        if (newClient.name.trim() !== '' && newClient.email.trim() !== '') {
+            fetch('http://localhost:5000/clients', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newClient)
-            });
-            if (!response.ok) {
-                throw new Error('Failed to add client.');
-            }
-            const data = await response.json();
-            setClients([...clients, data.client]);
-            setNewClient({
-                name: '',
-                email: '',
-                phone: '',
-                address: '',
-                city: '',
-                state: '',
-                zipCode: ''
-            });
-            setShowForm(false);
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: 'Client added successfully!',
-            });
-        } catch (error) {
-            console.error('Error:', error);
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.clientId) {
+                        setClients([...clients, data]);
+                        setNewClient({
+                            name: '',
+                            email: '',
+                            phone: '',
+                            address: '',
+                            city: '',
+                            state: '',
+                            zipCode: ''
+                        });
+                        setShowForm(false);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Client added successfully!',
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to add client.',
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while adding the client.',
+                    });
+                });
+        } else {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: error.message || 'An error occurred while adding the client.',
+                text: 'Please enter client name and email.',
             });
         }
     };
+
+
+
 
     const handleRemoveClient = async (clientId, clientName) => {
         console.log(`Attempting to delete client with id: ${clientId}, name: ${clientName}`);
@@ -205,7 +214,7 @@ const Client = () => {
                             onChange={handleInputChange}
                             placeholder="Enter client's zip code"
                         />
-                        <button type="submit">Submit</button>
+                        <button onClick={handleAddClient}>Submit</button>
                     </form>
                 </div>
             )}

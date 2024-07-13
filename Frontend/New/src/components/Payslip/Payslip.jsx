@@ -5,6 +5,7 @@ import 'jspdf-autotable';
 import './Payslip.css';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { toWords } from 'number-to-words'; // Import the library
 
 function Payslip() {
     const navigate = useNavigate();
@@ -62,14 +63,6 @@ function Payslip() {
         const paidDays = parseFloat(data.paidDays) || 0;
         const lopDays = parseFloat(data.lopDays) || 0;
 
-        console.log('Basic Salary:', basicSalary);
-        console.log('Allowances:', allowances);
-        console.log('Other Benefits:', otherBenefits);
-        console.log('TDS:', tds);
-        console.log('Other Deductions:', otherDeductions);
-        console.log('Paid Days:', paidDays);
-        console.log('LOP Days:', lopDays);
-
         const grossEarnings = basicSalary + allowances + otherBenefits;
         const totalDeductions = tds + otherDeductions;
         const monthlySalary = basicSalary + allowances + otherBenefits;
@@ -79,11 +72,6 @@ function Payslip() {
         const lopDeduction = lopDays * dailySalary;
 
         const netPay = grossEarnings - totalDeductions - lopDeduction;
-
-        console.log('Gross Earnings:', grossEarnings);
-        console.log('Total Deductions:', totalDeductions);
-        console.log('LOP Deduction:', lopDeduction);
-        console.log('Net Pay:', netPay);
 
         // Update net pay in formData
         setFormData((prevData) => ({ ...prevData, netPay: netPay.toFixed(2) }));
@@ -135,12 +123,15 @@ function Payslip() {
             margin: { top: 10, left: 15, right: 15 }
         });
 
+        // Convert netPay to words
+        const netPayInWords = toWords(parseFloat(formData.netPay));
+
         // Net Payable
         doc.autoTable({
             startY: doc.lastAutoTable.finalY + 10,
             body: [
                 [`Net Pay`, `₹ ${formData.netPay}`],
-                [`Total Net Payable (Amount In Words)`, `${formData.netPay} only`],
+                [`Total Net Payable (Amount In Words)`, `${netPayInWords} rupees only`],
                 [`**Total Net Payable = Gross Earnings - Total Deductions - LOP Deduction`, ``]
             ],
             theme: 'plain',
@@ -216,18 +207,16 @@ function Payslip() {
                             type="text"
                             name="designation"
                             value={formData.designation}
-                            onChange={handleChange}
-                            disabled
+                            readOnly
                         />
                     </div>
                     <div className="form-group">
                         <label>Date of Joining:</label>
                         <input
-                            type="text"
+                            type="date"
                             name="dateOfJoining"
                             value={formData.dateOfJoining}
-                            onChange={handleChange}
-                            disabled
+                            readOnly
                         />
                     </div>
                     <div className="form-group">
@@ -237,7 +226,6 @@ function Payslip() {
                             name="payPeriod"
                             value={formData.payPeriod}
                             onChange={handleChange}
-                            required
                         />
                     </div>
                     <div className="form-group">
@@ -246,9 +234,7 @@ function Payslip() {
                             type="number"
                             name="basicSalary"
                             value={formData.basicSalary}
-                            onChange={handleChange}
-                            required
-                            disabled
+                            readOnly
                         />
                     </div>
                     <div className="form-group">
@@ -258,17 +244,15 @@ function Payslip() {
                             name="allowances"
                             value={formData.allowances}
                             onChange={handleChange}
-                            required
                         />
                     </div>
                     <div className="form-group">
-                        <label>Other Benefits (Bonus):</label>
+                        <label>Other Benefits:</label>
                         <input
                             type="number"
                             name="otherBenefits"
                             value={formData.otherBenefits}
                             onChange={handleChange}
-                            required
                         />
                     </div>
                     <div className="form-group">
@@ -278,7 +262,6 @@ function Payslip() {
                             name="tds"
                             value={formData.tds}
                             onChange={handleChange}
-                            required
                         />
                     </div>
                     <div className="form-group">
@@ -288,18 +271,6 @@ function Payslip() {
                             name="otherDeductions"
                             value={formData.otherDeductions}
                             onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Net Pay:</label>
-                        <input
-                            type="number"
-                            name="netPay"
-                            value={formData.netPay}
-                            onChange={handleChange}
-                            required
-                            disabled
                         />
                     </div>
                     <div className="form-group">
@@ -309,7 +280,6 @@ function Payslip() {
                             name="paidDays"
                             value={formData.paidDays}
                             onChange={handleChange}
-                            required
                         />
                     </div>
                     <div className="form-group">
@@ -319,10 +289,22 @@ function Payslip() {
                             name="lopDays"
                             value={formData.lopDays}
                             onChange={handleChange}
-                            required
                         />
                     </div>
-                    <button type="button" className="generate-button" onClick={generatePDF}>
+                    <div className="form-group">
+                        <label>Net Pay:</label>
+                        <input
+                            type="number"
+                            name="netPay"
+                            value={formData.netPay}
+                            readOnly
+                        />
+                    </div>
+                    <button
+                        type="button"
+                        className="generate-button"
+                        onClick={generatePDF}
+                    >
                         Generate Payslip
                     </button>
                 </form>

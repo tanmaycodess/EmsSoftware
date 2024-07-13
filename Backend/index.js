@@ -21,6 +21,8 @@ app.use(cors());
 
 
 const AutoIncrement = autoIncrement(mongoose);
+
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -128,25 +130,83 @@ payslipSchema.plugin(AutoIncrement, { inc_field: 'payslipId' });
 const Payslip = mongoose.model('Payslip', payslipSchema);
 
 const clientSchema = new mongoose.Schema({
-    clientId: { type: Number, required: true, unique: true },
+    clientId: { type: Number, unique: true },
     name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    phone: String,
-    address: String,
-    city: String,
-    state: String,
-    zipCode: String
+    email: { type: String, required: true },
+    phone: { type: String },
+    address: { type: String },
+    city: { type: String },
+    state: { type: String },
+    zipCode: { type: String }
 });
 
 clientSchema.plugin(AutoIncrement, { inc_field: 'clientId' });
 
 const Client = mongoose.model('Client', clientSchema);
 
+
 // JWT token generation function
 function generateTokenForUser(userEmail) {
     const token = jwt.sign({ email: userEmail }, process.env.JWT_SECRET || 'your_secret_key', { expiresIn: '1d' });
     return token;
 }
+
+// Endpoint to get the total number of employees
+app.get('/total-employees', async (req, res) => {
+    try {
+        const totalEmployees = await Employee.countDocuments();
+        res.json({ total: totalEmployees });
+    } catch (err) {
+        res.status(500).json({ error: 'An error occurred while retrieving the total number of employees' });
+    }
+});
+
+// Endpoint to get the total number of Users
+app.get('/total-users', async (req, res) => {
+    try {
+        const totalUsers = await User.countDocuments({});
+        res.json({ total: totalUsers });
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching total users' });
+    }
+});
+
+// Endpoint to get the total number of Clients
+app.get('/total-clients', async (req, res) => {
+    try {
+        const totalClients = await Client.countDocuments({});
+        res.json({ total: totalClients });
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching total clients' });
+    }
+});
+
+// Endpoint to get the total number of Payslip
+app.get('/total-payslips', async (req, res) => {
+    try {
+        const totalPayslips = await Payslip.countDocuments({});
+        res.json({ total: totalPayslips });
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching total clients' });
+    }
+});
+
+
+// Route to calculate total salary
+app.get('/total-salary-spent', async (req, res) => {
+    try {
+        // Example calculation: Replace with your actual logic to sum up salaries
+        const totalSalarySpent = await Employee.aggregate([
+            { $group: { _id: null, totalSalarySpent: { $sum: '$salary' } } }
+        ]);
+
+        res.json({ totalSalarySpent: totalSalarySpent[0].totalSalarySpent });
+    } catch (err) {
+        console.error('Error fetching total salary spent:', err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+});
+
 
 // Endpoint for user login
 app.post('/login', async (req, res) => {
@@ -355,16 +415,48 @@ app.get('/payslip/download/:payslipId', async (req, res) => {
 
 
 // Endpoint to add a new client
+
+// app.post('/clients', async (req, res) => {
+//     const { name, email, phone, address, city, state, zipCode } = req.body;
+//     const newClient = new Client({ name, email, phone, address, city, state, zipCode });
+//     try {
+//         await newClient.save();
+//         res.status(201).json({ message: 'Client added successfully', client: newClient });
+//     } catch (err) {
+//         res.status(500).json({ message: 'An error occurred while adding the client.', error: err.message });
+//     }
+// });
+
 app.post('/clients', async (req, res) => {
     const { name, email, phone, address, city, state, zipCode } = req.body;
-    const newClient = new Client({ name, email, phone, address, city, state, zipCode });
+
     try {
-        await newClient.save();
-        res.status(201).json({ message: 'Client added successfully', client: newClient });
-    } catch (err) {
-        res.status(500).json({ message: 'An error occurred while adding the client.', error: err.message });
+        // Check if client with the same email already exists
+        const existingClient = await Client.findOne({ email });
+
+        if (existingClient) {
+            return res.status(400).json({ message: 'Client with this email already exists.' });
+        }
+
+        const newClient = new Client({
+            name,
+            email,
+            phone,
+            address,
+            city,
+            state,
+            zipCode
+        });
+
+        const savedClient = await newClient.save();
+        res.status(201).json(savedClient);
+    } catch (error) {
+        console.error('Error adding client:', error);
+        res.status(500).json({ message: 'Failed to add client' });
     }
 });
+
+
 
 // Endpoint to fetch all clients
 app.get('/clients', async (req, res) => {
