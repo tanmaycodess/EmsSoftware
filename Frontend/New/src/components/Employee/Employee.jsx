@@ -26,7 +26,7 @@ const Employee = () => {
     }, []);
 
     const fetchEmployees = () => {
-        fetch('http://localhost:5000/employees')
+        fetch('https://emssoftware-backend.onrender.com/employees')
             .then(response => response.json())
             .then(data => setEmployees(data))
             .catch(error => console.error('Error fetching employees:', error));
@@ -40,7 +40,7 @@ const Employee = () => {
     const handleAddEmployee = (e) => {
         e.preventDefault();
         if (newEmployee.name.trim() !== '' && newEmployee.email.trim() !== '') {
-            fetch('http://localhost:5000/employees', {
+            fetch('https://emssoftware-backend.onrender.com/employees', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -98,7 +98,7 @@ const Employee = () => {
         }).then((result) => {
             // Check if user confirmed deletion
             if (result.isConfirmed) {
-                fetch(`http://localhost:5000/employees/${employeeId}`, {
+                fetch(`https://emssoftware-backend.onrender.com/employees/${employeeId}`, {
                     method: 'DELETE',
                 })
                     .then(response => response.json())

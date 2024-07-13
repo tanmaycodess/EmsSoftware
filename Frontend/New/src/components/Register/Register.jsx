@@ -16,7 +16,7 @@ function UserManagementPage() {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('http://localhost:5000/users');
+            const response = await fetch('https://emssoftware-backend.onrender.com/users');
             if (response.ok) {
                 const data = await response.json();
                 setUsers(data);
@@ -36,7 +36,7 @@ function UserManagementPage() {
     // Register a new user
     const handleRegistration = async () => {
         try {
-            const response = await fetch('http://localhost:5000/users', {
+            const response = await fetch('https://emssoftware-backend.onrender.com/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ function UserManagementPage() {
         // Check if user confirmed deletion
         if (confirmResult.isConfirmed) {
             try {
-                const response = await fetch(`http://localhost:5000/users`, {
+                const response = await fetch(`https://emssoftware-backend.onrender.com/users`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',

@@ -15,14 +15,14 @@ const Profile = () => {
     }, []);
 
     const fetchEmployees = () => {
-        axios.get('http://localhost:5000/employees')
+        axios.get('https://emssoftware-backend.onrender.com/employees')
             .then(response => setEmployees(response.data))
             .catch(error => console.error('Error fetching employees:', error));
     };
 
     useEffect(() => {
         if (selectedEmployeeId) {
-            axios.get(`http://localhost:5000/employees/${selectedEmployeeId}`)
+            axios.get(`https://emssoftware-backend.onrender.com/employees/${selectedEmployeeId}`)
                 .then(response => setEmployee(response.data))
                 .catch(error => console.error('Error fetching employee data:', error));
         }
@@ -37,7 +37,7 @@ const Profile = () => {
         e.preventDefault();
         const updatedEmployee = { ...employee };
         updatedEmployee.date_of_joining = new Date(updatedEmployee.date_of_joining).toISOString().split('T')[0];
-        axios.put(`http://localhost:5000/employees/${selectedEmployeeId}`, updatedEmployee)
+        axios.put(`https://emssoftware-backend.onrender.com/employees/${selectedEmployeeId}`, updatedEmployee)
             .then(() => {
                 setIsEditing(false);
                 Swal.fire({

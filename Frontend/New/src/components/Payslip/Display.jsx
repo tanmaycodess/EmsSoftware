@@ -14,7 +14,7 @@ function EmployeePayslips() {
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     useEffect(() => {
-        fetch('http://localhost:5000/employees')
+        fetch('https://emssoftware-backend.onrender.com/employees')
             .then((response) => response.json())
             .then((data) => setEmployees(data))
             .catch((error) => console.error('Error fetching employees:', error));
@@ -35,7 +35,7 @@ function EmployeePayslips() {
 
     const fetchPayslips = (employeeId, date) => {
         const formattedDate = format(date, 'yyyy-MM');
-        axios.get(`http://localhost:5000/payslips/${employeeId}/${formattedDate}`)
+        axios.get(`https://emssoftware-backend.onrender.com/payslips/${employeeId}/${formattedDate}`)
             .then(response => setPayslips(response.data))
             .catch(error => console.error('Error fetching payslips:', error));
     };
@@ -49,7 +49,7 @@ function EmployeePayslips() {
             timer: 2000,
         });
 
-        axios.get(`http://localhost:5000/payslip/download/${payslipID}`, {
+        axios.get(`https://emssoftware-backend.onrender.com/payslip/download/${payslipID}`, {
             responseType: 'arraybuffer',
         })
             .then(response => {
@@ -92,7 +92,7 @@ function EmployeePayslips() {
             cancelButtonText: 'No, keep it'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:5000/payslips/${payslipID}`, {
+                fetch(`https://emssoftware-backend.onrender.com/payslips/${payslipID}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'

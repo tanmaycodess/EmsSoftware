@@ -17,10 +17,10 @@ const HomePage = () => {
         const fetchData = async () => {
             try {
                 const [employeesRes, usersRes, clientsRes, payslipsRes] = await Promise.all([
-                    axios.get('http://localhost:5000/total-employees'),
-                    axios.get('http://localhost:5000/total-users'),
-                    axios.get('http://localhost:5000/total-clients'),
-                    axios.get('http://localhost:5000/total-payslips')
+                    axios.get('https://emssoftware-backend.onrender.com/total-employees'),
+                    axios.get('https://emssoftware-backend.onrender.com/total-users'),
+                    axios.get('https://emssoftware-backend.onrender.com/total-clients'),
+                    axios.get('https://emssoftware-backend.onrender.com/total-payslips')
                 ]);
 
                 setTotalEmployees(employeesRes.data.total);
@@ -38,7 +38,7 @@ const HomePage = () => {
     useEffect(() => {
         const fetchTotalSalarySpent = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/total-salary-spent');
+                const response = await axios.get('https://emssoftware-backend.onrender.com/total-salary-spent');
                 setTotalSalarySpent(response.data.totalSalarySpent);
             } catch (error) {
                 console.error('Error fetching total salary spent:', error);
@@ -46,7 +46,7 @@ const HomePage = () => {
         };
 
         fetchTotalSalarySpent();
-    }, []); 
+    }, []);
 
 
     const openSidebar = () => {

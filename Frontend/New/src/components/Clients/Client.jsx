@@ -24,7 +24,7 @@ const Client = () => {
 
     const fetchClients = async () => {
         try {
-            const response = await fetch('http://localhost:5000/clients');
+            const response = await fetch('https://emssoftware-backend.onrender.com/clients');
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -44,7 +44,7 @@ const Client = () => {
         e.preventDefault();
         console.log(newClient); // Add this line
         if (newClient.name.trim() !== '' && newClient.email.trim() !== '') {
-            fetch('http://localhost:5000/clients', {
+            fetch('https://emssoftware-backend.onrender.com/clients', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -114,7 +114,7 @@ const Client = () => {
         if (!result.isConfirmed) return;
 
         try {
-            const response = await fetch(`http://localhost:5000/clients/${clientId}`, {
+            const response = await fetch(`https://emssoftware-backend.onrender.com/clients/${clientId}`, {
                 method: 'DELETE',
             });
             if (!response.ok) {

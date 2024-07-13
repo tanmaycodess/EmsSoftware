@@ -20,14 +20,14 @@ function UpdateClient() {
     }, [selectedClientId]);
 
     const fetchClients = () => {
-        axios.get('http://localhost:5000/clients')
+        axios.get('https://emssoftware-backend.onrender.com/clients')
             .then(response => setClients(response.data))
             .catch(error => console.error('Error fetching clients:', error));
     };
 
     const fetchClient = (clientId) => {
         console.log(`Fetching client with ID: ${clientId}`); // Debugging line
-        axios.get(`http://localhost:5000/clients/${clientId}`)
+        axios.get(`https://emssoftware-backend.onrender.com/clients/${clientId}`)
             .then(response => {
                 console.log('Client data:', response.data); // Debugging line
                 setClient(response.data);
@@ -51,7 +51,7 @@ function UpdateClient() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.put(`http://localhost:5000/clients/${selectedClientId}`, client)
+        axios.put(`https://emssoftware-backend.onrender.com/clients/${selectedClientId}`, client)
             .then(response => {
                 console.log(response.data);
                 navigate('/client'); // Navigate back to clients page
