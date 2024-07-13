@@ -140,7 +140,7 @@ const HomePage = () => {
                         </div>
                         <div className="card total-salary-spent">
                             <div className="card-header">Total Rupees Spent on Salaries</div>
-                            <div className="card-body">{totalSalarySpent}</div>
+                            <div className="card-body"> &#x20B9; {totalSalarySpent}</div>
                         </div>
                     </div>
                 </div>
