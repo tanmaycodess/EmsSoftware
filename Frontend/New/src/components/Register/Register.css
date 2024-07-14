@@ -1,20 +1,45 @@
 /* Register.css */
 
+:root {
+    --primary-color: #3498db;
+    --primary-hover: #2980b9;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --success-color: #28a745;
+    --success-hover: #218838;
+    --bg-color: #f9f9f9;
+    --text-color: #555;
+    --heading-color: #34495e;
+    --input-bg: #ecf0f1;
+    --input-border: #ccc;
+    --input-focus: #3498db;
+    --border-radius: 8px;
+    --box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 10px;
+    margin: 0;
+}
+
 .container {
     max-width: 600px;
-    margin: 0 auto;
+    margin: 50px auto;
     padding: 20px;
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
     border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
     text-align: center;
     margin-bottom: 20px;
     font-size: 2.5rem;
-    color: #333;
+    color: var(--heading-color);
 }
 
 form {
@@ -23,50 +48,58 @@ form {
 }
 
 form input {
-    margin-bottom: 10px;
-    padding: 10px;
+    margin-bottom: 15px;
+    padding: 12px;
     font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid var(--input-border);
+    border-radius: var(--border-radius);
+    background-color: var(--input-bg);
+    transition: border-color 0.3s;
+}
+
+form input:focus {
+    border-color: var(--input-focus);
+    outline: none;
 }
 
 form button {
-    padding: 10px 20px;
+    padding: 12px 20px;
     font-size: 1rem;
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 form button:hover {
-    background-color: #0056b3;
+    background-color: var(--primary-hover);
 }
 
 .user-list {
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .user-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 12px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     background-color: #fff;
+    box-shadow: var(--box-shadow);
 }
 
 .user-item button {
     padding: 8px 16px;
     font-size: 0.9rem;
-    background-color: #dc3545;
+    background-color: var(--accent-color);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -76,17 +109,47 @@ form button:hover {
 }
 
 .gobtn {
-    margin-top: 20px;
-    padding: 10px 20px;
+    display: block;
+    width: 100%;
+    margin-top: 30px;
+    padding: 12px 20px;
     font-size: 1rem;
-    background-color: #28a745;
+    background-color: var(--success-color);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .gobtn:hover {
-    background-color: #218838;
+    background-color: var(--success-hover);
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    form input,
+    form button,
+    .user-item button,
+    .gobtn {
+        font-size: 0.9rem;
+    }
+
+    .user-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .user-item button {
+        margin-top: 10px;
+        align-self: flex-end;
+    }
 }

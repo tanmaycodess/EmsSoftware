@@ -3,11 +3,23 @@
     --btn-hover: #cacaca;
     --item-bg: #f0f0f0;
     --modal-bg: rgba(141, 141, 141, 0.541);
+    --primary-color: #3498db;
+    --primary-hover: #2980b9;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --bg-color: #f9f9f9;
+    --text-color: #555;
+    --heading-color: #34495e;
+    --border-radius: 8px;
+    --box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
 body {
-    font-family: sans-serif;
+    font-family: 'Arial', sans-serif;
     padding: 0 10px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
 }
 
 .employee-management-container {
@@ -21,20 +33,21 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 50px;
-
 }
 
 .header h1 {
     margin: 0;
-
+    color: var(--heading-color);
+    font-size: 2em;
 }
 
 .header>button {
     padding: 10px 15px;
-    border-radius: 20px;
+    border-radius: var(--border-radius);
     border: none;
     background-color: var(--btn);
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .header>button:hover {
@@ -47,13 +60,16 @@ body {
 }
 
 .employees>div {
-    border: 1px solid black;
+    border: 1px solid #ddd;
     overflow-y: scroll;
     height: 450px;
     flex: 1;
     padding: 10px;
     display: flex;
     flex-direction: column;
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
 }
 
 /* Employee list styles */
@@ -62,8 +78,8 @@ body {
     border: 1px solid #ccc;
     padding: 20px;
     margin-top: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
     transition: background-color 0.3s;
 }
 
@@ -74,7 +90,7 @@ body {
 .employees__names--title {
     font-size: 1.8em;
     margin-bottom: 15px;
-    color: #2c3e50;
+    color: var(--secondary-color);
     text-align: center;
 }
 
@@ -87,7 +103,7 @@ body {
 .employees__names--item {
     background-color: #ecf0f1;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
 }
@@ -99,7 +115,7 @@ body {
 
 .employeeDelete {
     float: right;
-    color: #e74c3c;
+    color: var(--accent-color);
     cursor: pointer;
 }
 
@@ -108,8 +124,8 @@ body {
     width: 100%;
     background-color: #fff;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
     margin-bottom: 20px;
 }
 
@@ -130,7 +146,7 @@ body {
     flex: 1;
     padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     font-size: 16px;
 }
 
@@ -138,7 +154,7 @@ body {
     flex: 1;
     padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     font-size: 16px;
 }
 
@@ -150,9 +166,9 @@ body {
 .addEmployee_create--submit {
     padding: 12px 24px;
     border: none;
-    background-color: #3498db;
+    background-color: var(--primary-color);
     color: #fff;
-    border-radius: 20px;
+    border-radius: var(--border-radius);
     cursor: pointer;
     align-self: flex-end;
     font-size: 16px;
@@ -160,7 +176,7 @@ body {
 }
 
 .addEmployee_create--submit:hover {
-    background-color: #2980b9;
+    background-color: var(--primary-hover);
 }
 
 .logout {
@@ -169,7 +185,7 @@ body {
     padding: 10px 20px;
     border: none;
     background-color: var(--btn);
-    border-radius: 20px;
+    border-radius: var(--border-radius);
     cursor: pointer;
     font-size: 16px;
 }
@@ -180,22 +196,12 @@ body {
 
 /* Employee details styles */
 .employees__single {
-    background-color: #f9f9f9;
+    background-color: var(--bg-color);
     border: 1px solid #ddd;
     padding: 20px;
     margin-top: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Employee details styles */
-.employees__single {
-    background-color: #f0f4f8;
-    border: 1px solid #ccc;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
     transition: background-color 0.3s;
 }
 
@@ -206,7 +212,7 @@ body {
 .employees__single--title {
     font-size: 1.8em;
     margin-bottom: 15px;
-    color: #2c3e50;
+    color: var(--secondary-color);
     text-align: center;
 }
 
@@ -216,8 +222,8 @@ body {
     text-transform: uppercase;
     padding: 5px;
     margin-bottom: 10px;
-    color: #34495e;
-    border-bottom: 2px solid #34495e;
+    color: var(--heading-color);
+    border-bottom: 2px solid var(--heading-color);
 }
 
 .employees__single--info {
@@ -226,7 +232,7 @@ body {
     align-items: center;
     gap: 10px;
     font-size: 1.1em;
-    color: #555;
+    color: var(--text-color);
 }
 
 .employees__single--info>img {
@@ -243,7 +249,7 @@ select[name="categories"] {
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #bbb;
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     background-color: #fff;
     font-size: 1em;
     color: #333;
@@ -251,20 +257,80 @@ select[name="categories"] {
 }
 
 select[name="categories"]:focus {
-    border-color: #34495e;
+    border-color: var(--heading-color);
     outline: none;
 }
 
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
-/* 
-Category dropdown styles
-select[name="categories"] {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    font-size: 1em;
-    color: #333;
-} */
+    .header h1 {
+        font-size: 1.5em;
+    }
+
+    .header>button {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .employees {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .employees>div {
+        height: auto;
+    }
+
+    .addEmployee_create>div {
+        flex-direction: column;
+    }
+
+    .addEmployee_create label {
+        width: 100%;
+    }
+
+    .addEmployee_create>div>input,
+    .addEmployee_create input,
+    select[name="categories"] {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 1.2em;
+    }
+
+    .header>button,
+    .addEmployee_create--submit,
+    .logout {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .employees__names--title,
+    .employees__single--title {
+        font-size: 1.5em;
+    }
+
+    .employees__single--heading {
+        font-size: 20px;
+    }
+
+    .employees__single--info>img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .employees__names--item,
+    .addEmployee_create>div>input,
+    .addEmployee_create input,
+    select[name="categories"] {
+        font-size: 14px;
+    }
+}
