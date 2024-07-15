@@ -17,7 +17,8 @@ function Payslip() {
         basicSalary: '',
         allowances: '',
         otherBenefits: '',
-        tds: '',
+        professionalTax: 'Not Applicable', // Default value set to "Not Applicable"
+        tds: 'Not Applicable', // Default value set to "Not Applicable"
         otherDeductions: '',
         netPay: '',
         paidDays: '',
@@ -54,27 +55,34 @@ function Payslip() {
         });
     };
 
+    const handleTaxChange = (taxType) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            professionalTax: taxType === 'professionalTax' ? '200' : 'Not Applicable',
+            tds: taxType === 'tds' ? '10%' : 'Not Applicable'
+        }));
+    };
+
+
     const calculateNetPay = (data) => {
-        console.log(formData.payPeriod);
         const basicSalary = parseFloat(data.basicSalary) || 0;
         const allowances = parseFloat(data.allowances) || 0;
         const otherBenefits = parseFloat(data.otherBenefits) || 0;
-        const tds = parseFloat(data.tds) || 0;
+        const professionalTax = data.professionalTax === '200' ? 200 : 0;
+        const tds = data.tds === '10%' ? (basicSalary * 0.10) : 0;
         const otherDeductions = parseFloat(data.otherDeductions) || 0;
         const paidDays = parseFloat(data.paidDays) || 0;
         const lopDays = parseFloat(data.lopDays) || 0;
 
         const grossEarnings = basicSalary + allowances + otherBenefits;
-        const totalDeductions = tds + otherDeductions;
+        const totalDeductions = professionalTax + tds + otherDeductions;
         const monthlySalary = basicSalary + allowances + otherBenefits;
 
-        // Calculate proportional deductions for LOP days
         const dailySalary = monthlySalary / 30;
         const lopDeduction = lopDays * dailySalary;
 
         const netPay = grossEarnings - totalDeductions - lopDeduction;
 
-        // Update net pay in formData
         setFormData((prevData) => ({ ...prevData, netPay: netPay.toFixed(2) }));
     };
 
@@ -114,10 +122,11 @@ function Payslip() {
             startY: doc.lastAutoTable.finalY + 10,
             head: [['EARNINGS', 'AMOUNT', 'DEDUCTIONS', 'AMOUNT']],
             body: [
-                ['Basic Salary', ` Rs ${formData.basicSalary}`, 'TDS', ` Rs ${formData.tds}`],
-                ['Allowances', `Rs ${formData.allowances}`, 'Other Deductions', `Rs ${formData.otherDeductions}`],
-                ['Other Benefits (Bonus)', `Rs ${formData.otherBenefits}`, '', ''],
-                ['Gross Earnings', `Rs ${parseFloat(formData.basicSalary) + parseFloat(formData.allowances) + parseFloat(formData.otherBenefits)}`, 'Total Deductions', `Rs ${parseFloat(formData.tds) + parseFloat(formData.otherDeductions)}`]
+                ['Basic Salary', `Rs ${formData.basicSalary}`, 'TDS', `${formData.tds}`],
+                ['Allowances', `Rs ${formData.allowances}`, 'Professional Tax', `Rs ${formData.professionalTax}`],
+                ['Other Deductions', `Rs ${formData.otherDeductions}`, '', ''],
+                ['Gross Earnings', `Rs ${parseFloat(formData.basicSalary) + parseFloat(formData.allowances) + parseFloat(formData.otherBenefits)}`, 'Total Deductions', `Rs ${parseFloat(formData.tds) + parseFloat(formData.professionalTax) + parseFloat(formData.otherDeductions)}`],
+                ['Net Pay', `Rs ${formData.netPay}`, '', '']
             ],
             theme: 'plain',
             headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], fontStyle: 'bold' },
@@ -261,13 +270,18 @@ function Payslip() {
                         />
                     </div>
                     <div className="form-group">
-                        <label>TDS:</label>
-                        <input
-                            type="number"
-                            name="tds"
-                            value={formData.tds}
-                            onChange={handleChange}
-                        />
+                        <label htmlFor="tds">TDS</label>
+                        <select name="tds" id="tds" value={formData.tds} onChange={handleChange}>
+                            <option value="Not Applicable">Not Applicable</option>
+                            <option value="10%">10%</option>
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label>Professional Tax:</label>
+                        <select name="professionalTax" value={formData.professionalTax} onChange={(e) => handleChange(e)}>
+                            <option value="Not Applicable">Not Applicable</option>
+                            <option value="200">Rs 200</option>
+                        </select>
                     </div>
                     <div className="form-group">
                         <label>Other Deductions:</label>
