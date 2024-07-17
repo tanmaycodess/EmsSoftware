@@ -136,6 +136,11 @@ const HomePage = () => {
         closeSidebar(); // Optionally close sidebar after navigation
     };
 
+    const goToCodes = () => {
+        navigate('/codes');
+        closeSidebar(); // Optionally close sidebar after navigation
+    };
+
     const goToLogin = () => {
         localStorage.clear('token');
         navigate('/login');
@@ -155,6 +160,9 @@ const HomePage = () => {
                 </button>
                 <button className="sidebar-link" onClick={goToProfile}>
                     Employee Profile
+                </button>
+                <button className="sidebar-link" onClick={goToCodes}>
+                    Manage Employee Codes
                 </button>
                 <button className="sidebar-link" onClick={goToPayslip}>
                     Generate Payslip

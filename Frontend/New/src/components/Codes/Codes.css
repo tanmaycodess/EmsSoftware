@@ -1,0 +1,183 @@
+/* Codes.css */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+.App {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 40px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 30px;
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+select,
+input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+    background: #f9f9f9;
+}
+
+select:focus,
+input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* General styles for the container */
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    max-height: 400px;
+    /* set a maximum height for the list */
+    overflow-y: auto;
+    /* enable vertical scrolling if content exceeds height */
+    background-color: #fff;
+}
+
+/* Styles for each list item */
+ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.3s;
+}
+
+ul li:last-child {
+    border-bottom: none;
+}
+
+/* Styles for the text inside each list item */
+ul li span {
+    font-size: 16px;
+    color: #333;
+    flex-grow: 1;
+    margin-right: 15px;
+}
+
+/* Styles for buttons */
+ul li button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+ul li button:hover {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+/* Specific styles for the Edit button */
+ul li button:first-of-type {
+    background-color: #28a745;
+    color: #fff;
+    margin-right: 10px;
+}
+
+ul li button:first-of-type:hover {
+    background-color: #218838;
+}
+
+/* Specific styles for the Delete button */
+ul li button:last-of-type {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+ul li button:last-of-type:hover {
+    background-color: #c82333;
+}
+
+/* Hover effect for list items */
+ul li:hover {
+    background-color: #f9f9f9;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .App {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    form {
+        gap: 15px;
+    }
+
+    button[type="submit"] {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    li button {
+        font-size: 12px;
+        padding: 7px 10px;
+    }
+}

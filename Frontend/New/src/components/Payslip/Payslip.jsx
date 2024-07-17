@@ -11,18 +11,20 @@ function Payslip() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         employeeName: '',
+        employeeCode: '', // Added employee code field
         designation: '',
         dateOfJoining: '',
         payPeriod: '',
         basicSalary: '',
-        allowances: '',
-        otherBenefits: '',
+        allowances: 0,
+        otherBenefits: 0,
         professionalTax: 'Not Applicable', // Default value set to "Not Applicable"
         tds: 'Not Applicable', // Default value set to "Not Applicable"
-        otherDeductions: '',
+        otherDeductions: 0,
         netPay: '',
         paidDays: '',
-        lopDays: ''
+        lopDays: 0,
+        totalDeductions: 0,
     });
 
     const [employees, setEmployees] = useState([]);
@@ -32,6 +34,17 @@ function Payslip() {
             .then((response) => setEmployees(response.data))
             .catch((error) => console.error('Error fetching employees:', error));
     }, []);
+
+    const fetchEmployeeCode = (employeeId) => {
+        axios.get(`https://emssoftware-backend.onrender.com/employee-codes/${employeeId}`)
+            .then((response) => {
+                setFormData((prevData) => ({
+                    ...prevData,
+                    employeeCode: response.data.employeeCode
+                }));
+            })
+            .catch((error) => console.error('Error fetching employee code:', error));
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -45,6 +58,8 @@ function Payslip() {
                     updatedFormData.designation = selectedEmployee.designation;
                     updatedFormData.dateOfJoining = formattedDate;
                     updatedFormData.basicSalary = selectedEmployee.salary;
+                    fetchEmployeeCode(selectedEmployee.employeeId); // Fetch employee code
+
                 }
             }
 
@@ -83,8 +98,11 @@ function Payslip() {
 
         const netPay = grossEarnings - totalDeductions - lopDeduction;
 
-        setFormData((prevData) => ({ ...prevData, netPay: netPay.toFixed(2) }));
-    };
+        setFormData((prevData) => ({
+            ...prevData,
+            netPay: netPay.toFixed(2),
+            totalDeductions: totalDeductions.toFixed(2)
+        }));    };
 
     const generatePDF = () => {
         const doc = new jsPDF();
@@ -107,7 +125,8 @@ function Payslip() {
                 [`Employee Name: ${formData.employeeName}`, `Rs ${formData.netPay}`],
                 [`Designation: ${formData.designation}`, `Paid Days: ${formData.paidDays} | LOP Days: ${formData.lopDays}`],
                 [`Date of Joining: ${formData.dateOfJoining}`, ''],
-                [`Pay Period: ${formData.payPeriod}`, '']
+                [`Pay Period: ${formData.payPeriod}`, ''],
+                [`EmployeeCode: ${formData.employeeCode}`, '']
             ],
             theme: 'plain',
             headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], fontStyle: 'bold' },
@@ -125,7 +144,7 @@ function Payslip() {
                 ['Basic Salary', `Rs ${formData.basicSalary}`, 'TDS', `${formData.tds}`],
                 ['Allowances', `Rs ${formData.allowances}`, 'Professional Tax', `Rs ${formData.professionalTax}`],
                 ['Other Deductions', `Rs ${formData.otherDeductions}`, '', ''],
-                ['Gross Earnings', `Rs ${parseFloat(formData.basicSalary) + parseFloat(formData.allowances) + parseFloat(formData.otherBenefits)}`, 'Total Deductions', `Rs ${parseFloat(formData.tds) + parseFloat(formData.professionalTax) + parseFloat(formData.otherDeductions)}`],
+                ['Gross Earnings', `Rs ${parseFloat(formData.basicSalary) + parseFloat(formData.allowances) + parseFloat(formData.otherBenefits)}`, 'Total Deductions', `Rs ${formData.totalDeductions}`],
                 ['Net Pay', `Rs ${formData.netPay}`, '', '']
             ],
             theme: 'plain',
@@ -223,6 +242,11 @@ function Payslip() {
                             value={formData.designation}
                             readOnly
                         />
+
+                        <label>
+                            Employee Code:
+                            <input type="text" name="employeeCode" value={formData.employeeCode} readOnly />
+                        </label>
                     </div>
                     <div className="form-group">
                         <label>Date of Joining:</label>
@@ -319,6 +343,15 @@ function Payslip() {
                             readOnly
                         />
                     </div>
+                    <div className="form-group">
+                        <label>Total Deductions:</label>
+                        <input
+                            type="number"
+                            name="totaldeduction"
+                            value={formData.totalDeductions}
+                            readOnly
+                        />
+                     </div>
                     <button
                         type="button"
                         className="generate-button"

@@ -10,6 +10,7 @@ import Payslip from './components/Payslip/Payslip';
 import Display from './components/Payslip/Display';
 import Client from './components/Clients/Client';
 import ClientProfile from './components/ClientProfile/ClientProfile'
+import Codes from './components/Codes/Codes';
 
 
 const App = () => {
@@ -89,6 +90,15 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <ClientProfile />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/codes"
+            element={
+              <ProtectedRoute>
+                <Codes />
               </ProtectedRoute>
             }
           />

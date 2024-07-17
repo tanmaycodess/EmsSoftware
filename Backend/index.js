@@ -8,6 +8,7 @@ import autoIncrement from 'mongoose-sequence';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { type } from 'os';
 
 
 dotenv.config();
@@ -129,6 +130,28 @@ payslipSchema.plugin(AutoIncrement, { inc_field: 'payslipId' });
 
 const Payslip = mongoose.model('Payslip', payslipSchema);
 
+const employeeCodeSchema = new mongoose.Schema({
+    employeeCodeId: {
+        type: Number,
+        unique: true
+    },
+    employeeId: {
+        type: Number,
+        required: true,
+        ref: 'Employee'
+    },
+    employeeCode: {
+        type: String,
+        required: true,
+        unique: true
+    }
+});
+
+employeeCodeSchema.plugin(AutoIncrement, { inc_field: 'employeeCodeId' });
+
+const EmployeeCode = mongoose.model('EmployeeCode', employeeCodeSchema);
+
+
 const clientSchema = new mongoose.Schema({
     clientId: { type: Number, unique: true },
     name: { type: String, required: true },
@@ -150,6 +173,83 @@ function generateTokenForUser(userEmail) {
     const token = jwt.sign({ email: userEmail }, process.env.JWT_SECRET || 'your_secret_key', { expiresIn: '1d' });
     return token;
 }
+
+// endpoint to enter new employee code 
+app.post('/employee-codes', async (req, res) => {
+    try {
+        const { employeeId, employeeCode } = req.body;
+
+        // Check if the employee already has a code
+        const existingCode = await EmployeeCode.findOne({ employeeId });
+        if (existingCode) {
+            return res.status(400).json({ message: 'This employee already has a code assigned.' });
+        }
+
+        const newEmployeeCode = new EmployeeCode({ employeeId, employeeCode });
+        const savedEmployeeCode = await newEmployeeCode.save();
+        res.status(201).json(savedEmployeeCode);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+// endpoint to fetch employee code
+app.get('/employee-codes/:employeeId', async (req, res) => {
+    try {
+        const { employeeId } = req.params;
+        const employeeCode = await EmployeeCode.findOne({ employeeId: parseInt(employeeId, 10) });
+        if (!employeeCode) {
+            return res.status(404).json({ message: 'Employee code not found' });
+        }
+        res.status(200).json(employeeCode);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+app.get('/employee-codes', async (req, res) => {
+    try {
+        const employeeCodes = await EmployeeCode.find();
+        res.json(employeeCodes);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// endpoint to update employee code
+app.put('/employee-codes/:employeeId', async (req, res) => {
+    try {
+        const { employeeId } = req.params;
+        const { employeeCode } = req.body;
+        const updatedEmployeeCode = await EmployeeCode.findOneAndUpdate(
+            { employeeId: parseInt(employeeId, 10) },
+            { employeeCode },
+            { new: true }
+        );
+        if (!updatedEmployeeCode) {
+            return res.status(404).json({ message: 'Employee code not found' });
+        }
+        res.status(200).json(updatedEmployeeCode);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
+// endpoint to delete employee code
+app.delete('/employee-codes/:employeeId', async (req, res) => {
+    try {
+        const { employeeId } = req.params;
+        const deletedEmployeeCode = await EmployeeCode.findOneAndDelete({ employeeId: parseInt(employeeId, 10) });
+        if (!deletedEmployeeCode) {
+            return res.status(404).json({ message: 'Employee code not found' });
+        }
+        res.status(200).json({ message: 'Employee code deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 
 // Endpoint to get the total number of employees
 app.get('/total-employees', async (req, res) => {
