@@ -57,7 +57,7 @@ const Login = () => {
                     <button type="submit" className="login-button" disabled={loading}>
                         {loading ? (
                             <>
-                                Loading...
+                              
                                 <div className="spinner"></div>
                             </>
                         ) : 'Login'}
