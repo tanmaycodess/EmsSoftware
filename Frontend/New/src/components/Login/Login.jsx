@@ -7,12 +7,14 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [loading, setLoading] = useState(false); // Add loading state
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             setErrorMessage('');
+            setLoading(true); // Set loading to true when the form is submitted
             const response = await axios.post(`https://emssoftware-backend.onrender.com/login`, { email, password });
 
             if (response.status === 200 && response.data.token) {
@@ -21,8 +23,9 @@ const Login = () => {
             }
         } catch (error) {
             setErrorMessage('Your email and/or password are incorrect.');
+        } finally {
+            setLoading(false); // Set loading to false after the request is complete
         }
-         m  
     };
 
     return (
@@ -51,13 +54,18 @@ const Login = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <button type="submit" className="login-button">Login</button>
+                    <button type="submit" className="login-button" disabled={loading}>
+                        {loading ? (
+                            <>
+                                Loading...
+                                <div className="spinner"></div>
+                            </>
+                        ) : 'Login'}
+                    </button>
                 </form>
-                
             </div>
         </div>
     );
 };
 
 export default Login;
-
