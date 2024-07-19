@@ -3,7 +3,6 @@ import axios from 'axios';
 import './Codes.css';
 import Swal from 'sweetalert2';
 
-
 function Codes() {
     const [employeeCodes, setEmployeeCodes] = useState([]);
     const [employees, setEmployees] = useState([]);
@@ -38,6 +37,10 @@ function Codes() {
     const handleEmployeeChange = (e) => {
         const employeeId = e.target.value;
         setSelectedEmployeeId(employeeId);
+        checkIfEmployeeHasCode(employeeId);
+    };
+
+    const checkIfEmployeeHasCode = (employeeId) => {
         const codeExists = employeeCodes.some(code => code.employeeId === employeeId);
         setEmployeeHasCode(codeExists);
         if (codeExists) {
@@ -51,6 +54,8 @@ function Codes() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            checkIfEmployeeHasCode(selectedEmployeeId); // Check if the employee has a code before submitting
+
             if (!editMode && employeeHasCode) {
                 Swal.fire({
                     icon: 'warning',
@@ -87,7 +92,6 @@ function Codes() {
             }
         }
     };
-
 
     const handleEdit = (code) => {
         setSelectedEmployeeId(code.employeeId);

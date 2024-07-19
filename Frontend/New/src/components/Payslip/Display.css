@@ -1,219 +1,137 @@
 /* Display.css */
 
-:root {
-    --primary-color: #008CBA;
-    --primary-hover: #007bb5;
-    --success-color: #4CAF50;
-    --success-hover: #45a049;
-    --danger-color: #f44336;
-    --danger-hover: #e53935;
-    --background-color: #f9f9f9;
-    --text-color: #333;
-    --text-secondary: #555;
-    --border-radius: 8px;
-    --box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
 body {
     font-family: 'Arial', sans-serif;
-    padding: 0 10px;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    line-height: 1.6;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
 }
 
 .employee-payslips-container {
     max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: var(--background-color);
-    box-shadow: var(--box-shadow);
-    border-radius: var(--border-radius);
+    margin: 2rem auto;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.employee-payslips-container h1 {
+h1,
+h2 {
     text-align: center;
-    margin-bottom: 20px;
-    color: var(--text-color);
+    color: #333;
 }
 
 .form-group {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
+    margin-bottom: 1.5rem;
 }
 
-.form-group label {
-    margin-bottom: 8px;
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
     font-weight: bold;
-    color: var(--text-secondary);
 }
 
-.form-group select,
-.form-group .react-datepicker-wrapper {
+select,
+.react-datepicker-wrapper {
     width: 100%;
-    padding: 10px;
+    padding: 0.75rem;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 16px;
-    color: var(--text-color);
+    font-size: 1rem;
+    color: #333;
 }
 
 .react-datepicker-wrapper {
-    width: 100%;
+    display: block;
 }
 
-.react-datepicker__input-container input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    color: var(--text-color);
-}
-
-.payslips-table {
+table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 1rem;
 }
 
-.payslips-table th,
-.payslips-table td {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
+th,
+td {
+    padding: 0.75rem;
     text-align: left;
-    color: var(--text-color);
+    border-bottom: 1px solid #ddd;
 }
 
-.payslips-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
+th {
+    background-color: #f8f8f8;
+    color: #555;
 }
 
-.payslips-table tr:nth-child(even) {
-    background-color: var(--background-color);
+td {
+    background-color: #fff;
 }
 
-.payslips-table tr:hover {
-    background-color: #f1f1f1;
-}
-
-.payslips-table button {
-    padding: 8px 12px;
+button {
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;
     border: none;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
-.payslips-table button:first-child {
-    margin-right: 10px;
-    background-color: var(--success-color);
+button:focus {
+    outline: none;
+}
+
+button:hover {
+    background-color: #eaeaea;
+}
+
+button.download {
+    background-color: #007bff;
     color: white;
 }
 
-.payslips-table button:first-child:hover {
-    background-color: var(--success-hover);
+button.download:hover {
+    background-color: #0056b3;
 }
 
-.payslips-table button:last-child {
-    background-color: var(--danger-color);
+button.delete {
+    background-color: #dc3545;
     color: white;
 }
 
-.payslips-table button:last-child:hover {
-    background-color: var(--danger-hover);
+button.delete:hover {
+    background-color: #c82333;
 }
 
-.back {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: var(--primary-color);
+button.back {
+    background-color: #6c757d;
     color: white;
-    border: none;
-    border-radius: 4px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
 }
 
-.back:hover {
-    background-color: var(--primary-hover);
+button.back:hover {
+    background-color: #5a6268;
 }
 
 h4 {
     text-align: center;
-    margin-top: 20px;
-    color: var(--text-secondary);
+    color: #888;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 600px) {
     .employee-payslips-container {
-        padding: 10px;
+        padding: 1rem;
     }
 
-    .payslips-table th,
-    .payslips-table td {
-        padding: 10px;
+    table,
+    th,
+    td {
+        font-size: 0.875rem;
     }
 
-    .payslips-table button {
-        font-size: 12px;
-        padding: 6px 10px;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    .form-group label {
-        font-size: 14px;
-    }
-
-    .form-group select,
-    .react-datepicker__input-container input {
-        font-size: 14px;
-        padding: 8px;
-    }
-}
-
-@media (max-width: 480px) {
-    .employee-payslips-container {
-        padding: 5px;
-    }
-
-    .payslips-table th,
-    .payslips-table td {
-        padding: 8px;
-    }
-
-    .payslips-table button {
-        font-size: 10px;
-        padding: 4px 8px;
-    }
-
-    .form-group {
-        margin-bottom: 10px;
-    }
-
-    .form-group label {
-        font-size: 12px;
-    }
-
-    .form-group select,
-    .react-datepicker__input-container input {
-        font-size: 12px;
-        padding: 6px;
-    }
-
-    .back {
-        font-size: 14px;
-        padding: 8px 16px;
+    button {
+        padding: 0.5rem;
+        font-size: 0.875rem;
     }
 }

@@ -472,6 +472,27 @@ app.get('/payslips/:employeeId/:payPeriod', async (req, res) => {
     }
 });
 
+app.get('/count-by-month', async (req, res) => {
+    try {
+        const counts = await Payslip.aggregate([
+            {
+                $group: {
+                    _id: "$payPeriod", // Group by payPeriod
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $sort: { _id: 1 } // Sort by month
+            }
+        ]);
+
+        res.status(200).json(counts);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching payslip count by month', error });
+    }
+});
+
+
 // Delete a specific payslip
 app.delete('/payslips/:id', async (req, res) => {
     const { id } = req.params;

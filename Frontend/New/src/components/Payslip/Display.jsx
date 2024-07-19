@@ -12,13 +12,22 @@ function EmployeePayslips() {
     const [selectedEmployeeId, setSelectedEmployeeId] = useState('');
     const [payslips, setPayslips] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [monthlyPayslipCounts, setMonthlyPayslipCounts] = useState([]);
 
     useEffect(() => {
         fetch('https://emssoftware-backend.onrender.com/employees')
             .then((response) => response.json())
             .then((data) => setEmployees(data))
             .catch((error) => console.error('Error fetching employees:', error));
+
+        fetchMonthlyPayslipCounts();
     }, []);
+
+    const fetchMonthlyPayslipCounts = () => {
+        axios.get('https://emssoftware-backend.onrender.com/count-by-month')
+            .then(response => setMonthlyPayslipCounts(response.data))
+            .catch(error => console.error('Error fetching monthly payslip counts:', error));
+    };
 
     const handleEmployeeChange = (e) => {
         const employeeId = e.target.value;
@@ -81,7 +90,6 @@ function EmployeePayslips() {
             });
     };
 
-
     const deletePayslip = (payslipID) => {
         Swal.fire({
             title: 'Are you sure?',
@@ -130,7 +138,6 @@ function EmployeePayslips() {
         });
     };
 
-    
     const navigate = useNavigate();
 
     const goToHome = () => {
@@ -188,6 +195,27 @@ function EmployeePayslips() {
                 </table>
             ) : (
                 <h4>No payslips found for the selected employee and pay period.</h4>
+            )}
+            <h2>Monthly Payslip Counts</h2>
+            {monthlyPayslipCounts.length > 0 ? (
+                <table className="monthly-payslip-counts-table">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Payslip Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {monthlyPayslipCounts.map((count) => (
+                            <tr key={count._id}>
+                                <td>{count._id}</td>
+                                <td>{count.count}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            ) : (
+                <h4>No payslip counts available.</h4>
             )}
             <button className='back' onClick={goToHome}>Home</button>
         </div>
