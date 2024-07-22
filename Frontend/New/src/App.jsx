@@ -11,6 +11,9 @@ import Display from './components/Payslip/Display';
 import Client from './components/Clients/Client';
 import ClientProfile from './components/ClientProfile/ClientProfile'
 import Codes from './components/Codes/Codes';
+import TDS from './components/TDS/TDS';
+import TDSDETAILS from './components/TDS/TDSDETAILS';
+import List from './components/TDS/List';
 
 
 const App = () => {
@@ -99,6 +102,33 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Codes />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/tds"
+            element={
+              <ProtectedRoute>
+                <TDS />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/tdsdetails"
+            element={
+              <ProtectedRoute>
+                <TDSDETAILS />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/list"
+            element={
+              <ProtectedRoute>
+                <List />
               </ProtectedRoute>
             }
           />

@@ -1,0 +1,54 @@
+/* src/components/FetchPDFs.css */
+
+.fetch-pdfs {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.fetch-pdfs h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.fetch-pdfs ul {
+    list-style: none;
+    padding: 0;
+}
+
+.fetch-pdfs li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.fetch-pdfs a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.fetch-pdfs a:hover {
+    text-decoration: underline;
+}
+
+.fetch-pdfs button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.fetch-pdfs button:hover {
+    background-color: #c82333;
+}
+
+.fetch-pdfs span {
+    color: #666;
+    font-size: 14px;
+}

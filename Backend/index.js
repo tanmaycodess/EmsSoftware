@@ -168,11 +168,157 @@ clientSchema.plugin(AutoIncrement, { inc_field: 'clientId' });
 const Client = mongoose.model('Client', clientSchema);
 
 
+const tdsSchema = new mongoose.Schema({
+    tdsId: { type: Number, unique: true },
+    partyName: { type: String, required: true },
+    panCardNo: { type: String, required: true }
+});
+
+tdsSchema.plugin(AutoIncrement, { inc_field: 'tdsId' });
+
+const TDS = mongoose.model('TDS', tdsSchema);
+
+
+const tdsPdfSchema = new mongoose.Schema({
+    tdsPdfId: { type: Number, unique: true },
+    filename: { type: String, required: true },
+    contentType: { type: String, required: true },
+    data: { type: Buffer, required: true },
+    createdAt: { type: Date, default: Date.now }
+});
+
+tdsPdfSchema.plugin(AutoIncrement, { inc_field: 'tdsPdfId' });
+
+const TDSPDF = mongoose.model('TDSPDF', tdsPdfSchema);
+
+
 // JWT token generation function
 function generateTokenForUser(userEmail) {
     const token = jwt.sign({ email: userEmail }, process.env.JWT_SECRET || 'your_secret_key', { expiresIn: '1d' });
     return token;
 }
+
+// Endpoint to enter new TDS record
+app.post('/tds', async (req, res) => {
+    try {
+        const { partyName, panCardNo } = req.body;
+        const newTDS = new TDS({ partyName, panCardNo });
+        const savedTDS = await newTDS.save();
+        res.status(201).json(savedTDS);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+
+// Endpoint to fetch all TDS records
+app.get('/tds', async (req, res) => {
+    try {
+        const tdsRecords = await TDS.find();
+        res.status(200).json(tdsRecords);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Endpoint to update a TDS record by ID
+app.put('/tds/:tdsId', async (req, res) => {
+    try {
+        const { tdsId } = req.params;
+        const { partyName, panCardNo } = req.body;
+        const updatedTDS = await TDS.findOneAndUpdate(
+            { tdsId: parseInt(tdsId, 10) },
+            { partyName, panCardNo },
+            { new: true }
+        );
+        if (!updatedTDS) {
+            return res.status(404).json({ message: 'TDS record not found' });
+        }
+        res.status(200).json(updatedTDS);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Endpoint to delete a TDS record by ID
+app.delete('/tds/:tdsId', async (req, res) => {
+    try {
+        const { tdsId } = req.params;
+        const deletedTDS = await TDS.findOneAndDelete({ tdsId: parseInt(tdsId, 10) });
+        if (!deletedTDS) {
+            return res.status(404).json({ message: 'TDS record not found' });
+        }
+        res.status(200).json({ message: 'TDS record deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Endpoint to save TDS PDF
+app.post('/upload', upload.single('pdf'), async (req, res) => {
+    try {
+        const newPdf = new TDSPDF({
+            filename: req.file.originalname,
+            contentType: req.file.mimetype,
+            data: req.file.buffer
+        });
+        await newPdf.save();
+        res.status(201).json({ message: 'PDF saved successfully!', pdf: newPdf });
+    } catch (error) {
+        console.error('Error saving PDF:', error);
+        res.status(500).json({ error: 'Failed to save PDF.' });
+    }
+});
+
+// Endpoint to fetch all PDFs
+app.get('/pdfs', async (req, res) => {
+    try {
+        const pdfs = await TDSPDF.find({});
+        res.status(200).json(pdfs);
+    } catch (error) {
+        console.error('Error fetching PDFs:', error.message);
+        res.status(500).json({ error: 'Failed to fetch PDFs.', details: error.message });
+    }
+});
+
+// enpoint to download the tds pdf
+app.get('/download-pdf/:id', async (req, res) => {
+    try {
+        const pdfId = req.params.id;
+
+        // Fetch the PDF document from the database
+        const pdfDocument = await TDSPDF.findOne({ tdsPdfId: pdfId }).exec();
+
+        if (!pdfDocument) {
+            return res.status(404).send('PDF not found');
+        }
+
+        // Set the response headers
+        res.setHeader('Content-Disposition', `attachment; filename=${pdfDocument.filename}`);
+        res.setHeader('Content-Type', pdfDocument.contentType);
+
+        // Send the PDF data
+        res.send(pdfDocument.data);
+    } catch (err) {
+        console.error('Error downloading PDF:', err);
+        res.status(500).send('Server error');
+    }
+});
+
+// endpoint to delete TDS PDF
+app.delete('/pdfs/:id', async (req, res) => {
+    try {
+        const pdfId = req.params.id;
+        // Assuming you have a TDS PDF model
+        await TDSPDF.deleteOne({ tdsPdfId: pdfId });
+        res.status(200).send('PDF deleted successfully');
+    } catch (error) {
+        console.error('Error deleting PDF:', error);
+        res.status(500).send('Error deleting PDF');
+    }
+});
+
+
 
 // endpoint to enter new employee code 
 app.post('/employee-codes', async (req, res) => {

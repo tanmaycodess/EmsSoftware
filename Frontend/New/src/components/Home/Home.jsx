@@ -9,6 +9,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const HomePage = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(null); // State for tracking open dropdown
     const [totalEmployees, setTotalEmployees] = useState(0);
     const [totalUsers, setTotalUsers] = useState(0);
     const [totalClients, setTotalClients] = useState(0);
@@ -93,9 +94,9 @@ const HomePage = () => {
         setSidebarOpen(!sidebarOpen);
     };
 
-    // const openSidebar = () => {
-    //     setSidebarOpen(true);
-    // };
+    const toggleDropdown = (index) => {
+        setDropdownOpen(dropdownOpen === index ? null : index); // Toggle the dropdown
+    };
 
     const closeSidebar = () => {
         setSidebarOpen(false);
@@ -103,49 +104,63 @@ const HomePage = () => {
 
     const goToEmployeeManagement = () => {
         navigate('/employee');
-        closeSidebar(); // Optionally close sidebar after navigation
+        closeSidebar();
     };
 
     const goToProfile = () => {
         navigate('/profile');
-        closeSidebar(); // Optionally close sidebar after navigation
+        closeSidebar();
     };
 
     const goToRegister = () => {
         navigate('/register');
-        closeSidebar(); // Optionally close sidebar after navigation
+        closeSidebar();
     };
 
     const goToPayslip = () => {
         navigate('/payslip');
-        closeSidebar(); // Optionally close sidebar after navigation
+        closeSidebar();
     };
 
     const goToDisplay = () => {
         navigate('/display');
-        closeSidebar(); // Optionally close sidebar after navigation
+        closeSidebar();
     };
 
     const goToClient = () => {
         navigate('/client');
-        closeSidebar(); // Optionally close sidebar after navigation
+        closeSidebar();
     };
 
     const goToClientProfile = () => {
         navigate('/cprofile');
-        closeSidebar(); // Optionally close sidebar after navigation
+        closeSidebar();
     };
 
     const goToCodes = () => {
         navigate('/codes');
-        closeSidebar(); // Optionally close sidebar after navigation
+        closeSidebar();
+    };
+
+    const goToTDS = () => {
+        navigate('/tds');
+        closeSidebar();
+    };
+
+    const goToTDSDETAILS = () => {
+        navigate('/tdsdetails');
+        closeSidebar();
+    };
+
+    const goToList = () => {
+        navigate('/list');
+        closeSidebar();
     };
 
     const goToLogin = () => {
         localStorage.clear('token');
         navigate('/login');
     };
-
 
     return (
         <div className={`home-page ${sidebarOpen ? 'sidebar-open' : ''}`}>
@@ -155,27 +170,64 @@ const HomePage = () => {
                         &times;
                     </button>
                 </div>
-                <button className="sidebar-link" onClick={goToEmployeeManagement}>
-                    Manage Employee
-                </button>
-                <button className="sidebar-link" onClick={goToProfile}>
-                    Employee Profile
-                </button>
-                <button className="sidebar-link" onClick={goToCodes}>
-                    Manage Employee Codes
-                </button>
-                <button className="sidebar-link" onClick={goToPayslip}>
-                    Generate Payslip
-                </button>
-                <button className="sidebar-link" onClick={goToDisplay}>
-                    View Payslip
-                </button>
-                <button className="sidebar-link" onClick={goToClient}>
-                    Manage Client
-                </button>
-                <button className="sidebar-link" onClick={goToClientProfile}>
-                    Client Profile
-                </button>
+                <div className={`sidebar-group ${dropdownOpen === 1 ? 'active' : ''}`}>
+                    <button className="sidebar-link" onClick={() => toggleDropdown(1)}>
+                        Employee Management
+                    </button>
+                    <div className="sidebar-dropdown">
+                        <button className="Dsidebar-link" onClick={goToEmployeeManagement}>
+                            Manage Employee
+                        </button>
+                        <button className="Dsidebar-link" onClick={goToProfile}>
+                            Employee Profile
+                        </button>
+                        <button className="Dsidebar-link" onClick={goToCodes}>
+                            Manage Employee Codes
+                        </button>
+                    </div>
+                </div>
+                <div className={`sidebar-group ${dropdownOpen === 2 ? 'active' : ''}`}>
+                    <button className="sidebar-link" onClick={() => toggleDropdown(2)}>
+                        Payslip Management
+                    </button>
+                    <div className="sidebar-dropdown">
+                        <button className="Dsidebar-link" onClick={goToPayslip}>
+                            Generate Payslip
+                        </button>
+                        <button className="Dsidebar-link" onClick={goToDisplay}>
+                            View Payslip
+                        </button>
+                    </div>
+                </div>
+                <div className={`sidebar-group ${dropdownOpen === 3 ? 'active' : ''}`}>
+                    <button className="sidebar-link" onClick={() => toggleDropdown(3)}>
+                        Client Management
+                    </button>
+                    <div className="sidebar-dropdown">
+                        <button className="Dsidebar-link" onClick={goToClient}>
+                            Manage Client
+                        </button>
+                        <button className="Dsidebar-link" onClick={goToClientProfile}>
+                            Client Profile
+                        </button>
+                    </div>
+                </div>
+                <div className={`sidebar-group ${dropdownOpen === 4 ? 'active' : ''}`}>
+                    <button className="sidebar-link" onClick={() => toggleDropdown(4)}>
+                        TDS Management
+                    </button>
+                    <div className="sidebar-dropdown">
+                        <button className="Dsidebar-link" onClick={goToTDSDETAILS}>
+                            Input TDS Details
+                        </button>
+                        <button className="Dsidebar-link" onClick={goToTDS}>
+                            Generate TDS
+                        </button>
+                        <button className="Dsidebar-link" onClick={goToList}>
+                            View PDF's
+                        </button>
+                    </div>
+                </div>
                 <button className="sidebar-link" onClick={goToRegister}>
                     Manage User Auth
                 </button>
@@ -188,7 +240,7 @@ const HomePage = () => {
                     <button className="open-nav-btn" onClick={toggleSidebar}>
                         &#9776;
                     </button>
-                    <h1 className="page-title">Insansa's Dasboard</h1>
+                    <h1 className="page-title">Insansa's Dashboard</h1>
                 </div>
                 <div className="content">
                     <h2>Dashboard Overview</h2>
@@ -196,27 +248,22 @@ const HomePage = () => {
                         <div className="card total-employees">
                             <div className="card-header">Total Employees</div>
                             <div className="card-body">{totalEmployees}</div>
-                           
                         </div>
                         <div className="card total-users">
                             <div className="card-header">Total Users</div>
                             <div className="card-body">{totalUsers}</div>
-                            
                         </div>
                         <div className="card total-clients">
                             <div className="card-header">Total Clients</div>
                             <div className="card-body">{totalClients}</div>
-                           
                         </div>
                         <div className="card total-payslips">
                             <div className="card-header">Total Payslips</div>
                             <div className="card-body">{totalPayslips}</div>
-                           
                         </div>
                         <div className="card total-salary-spent">
                             <div className="card-header">Total Salary Spent</div>
                             <div className="card-body">&#x20B9; {totalSalarySpent}</div>
-                           
                         </div>
                     </div>
                     <div className="chart-container">

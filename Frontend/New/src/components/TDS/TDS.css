@@ -1,0 +1,296 @@
+/* TDS.css */
+
+.billing-details-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.billing-details-container h1,
+.billing-details-container h2,
+.billing-details-container h3 {
+    margin: 10px 0;
+    color: #333;
+}
+
+.form-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.form-container input,
+.form-container button {
+    padding: 10px;
+    font-size: 16px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-container input {
+    width: 180px;
+}
+
+.form-container button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-container button:hover {
+    background-color: #0056b3;
+}
+
+.billing-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.billing-table th,
+.billing-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.billing-table th {
+    background-color: #434242;
+    font-weight: bold;
+}
+
+.billing-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.billing-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.btn-download {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-download:hover {
+    background-color: #218838;
+}
+
+.hai{
+    background-color: #333;
+}
+
+/* TDS.css */
+
+/* Style for the file input container */
+.file-upload-container {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Style for the file input element */
+.file-upload-container input[type="file"] {
+    display: none;
+}
+
+/* Style for the file upload label */
+.file-upload-label {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Hover effect for the file upload label */
+.file-upload-label:hover {
+    background-color: #0056b3;
+}
+
+/* Style for displaying selected file name */
+.file-upload-container .file-name {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-container input {
+        width: calc(100% - 20px);
+    }
+
+    .billing-table th,
+    .billing-table td {
+        font-size: 14px;
+        padding: 6px;
+    }
+
+    .btn-download {
+        width: calc(100% - 20px);
+        margin: 5px 10px;
+    }
+}
+
+/* TDS.css */
+.tds-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.upload-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.upload-section input[type="file"] {
+    margin-bottom: 10px;
+}
+
+.upload-section .btn {
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.upload-section .btn:hover {
+    background-color: #0056b3;
+}
+
+.upload-section button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.upload-section button:hover {
+    background-color: #218838;
+}
+
+.entry-section {
+    margin-bottom: 20px;
+}
+
+.entry-section h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.entry-section form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.entry-section form input,
+.entry-section form select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: calc(33% - 20px);
+    box-sizing: border-box;
+}
+
+.entry-section form button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.entry-section form button:hover {
+    background-color: #0056b3;
+}
+
+.data-section h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.data-section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.data-section table th,
+.data-section table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.data-section table th {
+    background-color: #f2f2f2;
+}
+
+.data-section table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.data-section table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.data-section table td button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.data-section table td button:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+
+    .entry-section form input,
+    .entry-section form select {
+        width: calc(100% - 20px);
+    }
+}
