@@ -29,16 +29,22 @@ const PdfManager = () => {
     const handleDownload = async (id) => {
         try {
             console.log(`Requesting download for PDF with ID: ${id}`);
-            const response = await axios.get(`/download-pdf/${id}`, { responseType: 'blob' });
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', `pdf_${id}.pdf`);
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
+            const response = await axios.get(`https://emssoftware-backend.onrender.com/download-pdf/${id}`, { responseType: 'blob' });
 
-            Swal.fire('Success', 'PDF downloaded successfully.', 'success');
+            // Check if the response is of type PDF
+            if (response.headers['content-type'] === 'application/pdf') {
+                const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `pdf_${id}.pdf`);
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+
+                Swal.fire('Success', 'PDF downloaded successfully.', 'success');
+            } else {
+                throw new Error('Response is not a PDF file');
+            }
         } catch (error) {
             console.error('Error downloading PDF:', error.response ? error.response.data : error.message);
             Swal.fire('Error', 'Failed to download PDF.', 'error');
