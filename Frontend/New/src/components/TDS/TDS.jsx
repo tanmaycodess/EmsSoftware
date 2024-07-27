@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { CSVLink } from 'react-csv';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
 import './TDS.css';
 import axios from 'axios';
 import Papa from 'papaparse';
 import Swal from 'sweetalert2';
-
+import { useNavigate } from 'react-router-dom';
 
 const BillingDetails = () => {
     const [billingData, setBillingData] = useState([]);
@@ -16,19 +14,43 @@ const BillingDetails = () => {
     const [persons, setPersons] = useState([]);
     const [selectedEntryIndex, setSelectedEntryIndex] = useState(null);
     const [csvFile, setCsvFile] = useState(null);
+    const [isPasswordProtected, setIsPasswordProtected] = useState(true);
+    const [enteredPassword, setEnteredPassword] = useState('');
+    const correctPassword = 'password'; // Change this to your desired password
 
     useEffect(() => {
-        const fetchTdsRecords = async () => {
-            try {
-                const response = await axios.get('https://emssoftware-backend.onrender.com/tds'); // Replace with your actual API endpoint
-                setPersons(response.data); // Assuming the response contains an array of TDS records
-            } catch (error) {
-                console.error('Error fetching TDS records:', error);
-            }
-        };
+        if (isPasswordProtected) {
+            Swal.fire({
+                title: 'Enter Password',
+                input: 'password',
+                inputLabel: 'Password',
+                inputPlaceholder: 'Enter your password',
+                confirmButtonText: 'Submit',
+                showCancelButton: true,
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (result.value === correctPassword) {
+                        setIsPasswordProtected(false);
+                    } else {
+                        Swal.fire('Incorrect password', '', 'error');
+                        navigate('/home');
+                    }
+                }
+            });
+        } else {
+            const fetchTdsRecords = async () => {
+                try {
+                    const response = await axios.get('https://emssoftware-backend.onrender.com/tds');
+                    setPersons(response.data);
+                } catch (error) {
+                    console.error('Error fetching TDS records:', error);
+                }
+            };
 
-        fetchTdsRecords();
-    }, []);
+            fetchTdsRecords();
+        }
+    }, [isPasswordProtected]);
 
     const handleChange = (e) => {
         setNewEntry({ ...newEntry, [e.target.name]: e.target.value });
@@ -42,14 +64,12 @@ const BillingDetails = () => {
 
     const handleAddEntry = () => {
         if (selectedEntryIndex !== null) {
-            // Update existing entry
             const updatedData = billingData.map((entry, index) =>
                 index === selectedEntryIndex ? newEntry : entry
             );
             setBillingData(updatedData);
             setSelectedEntryIndex(null);
         } else {
-            // Add new entry
             setBillingData([...billingData, newEntry]);
         }
         setNewEntry({
@@ -132,79 +152,21 @@ const BillingDetails = () => {
         };
     });
 
-    const generatePDF = () => {
-        const doc = new jsPDF();
+    const navigate = useNavigate();
 
-        doc.setFontSize(18);
-        doc.text("Insansa Technologies", 105, 30, { align: 'center' });
-        doc.setFontSize(16);
-        doc.text("TDS Working From", 105, 37, { align: 'center' });
-        doc.setFontSize(14);
-        doc.text("Billing Details", 105, 44, { align: 'center' });
+    const goTohome = () => {
+        navigate('/home');
+    }
 
-        const tableColumn = headers.map(header => header.label);
-        const tableRows = csvData.map((data) => [
-            data.srNo,
-            data.month,
-            data.code,
-            data.typeOfPayment,
-            data.partyName,
-            data.panNo,
-            data.billDate,
-            data.billAmt,
-            data.tdsPercent,
-            data.tdsAmt,
-            data.totalAmt
-        ]);
-
-        doc.autoTable({
-            head: [tableColumn],
-            body: tableRows,
-            startY: 50
-        });
-
-        // Get the generated PDF file as a Blob
-        const pdfBlob = doc.output('blob');
-
-        // Call function to upload PDF Blob to the server
-        uploadPDF(pdfBlob);
-
-        doc.save("billing_details.pdf");
-    };
-
-    const uploadPDF = async (pdfBlob) => {
-        const formData = new FormData();
-        formData.append('pdf', pdfBlob, 'billing_details.pdf');
-
-        try {
-            const response = await axios.post('https://emssoftware-backend.onrender.com/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            Swal.fire({
-                icon: 'success',
-                title: 'PDF saved successfully!',
-                showConfirmButton: false,
-                timer: 1500
-            });
-        } catch (error) {
-            console.error('Error uploading PDF:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Failed to save PDF.',
-                text: 'There was an issue saving the PDF.',
-                confirmButtonText: 'Ok'
-            });
-        }
-    };
+    if (isPasswordProtected) {
+        return null; // Return null or a loading spinner while the password is being checked
+    }
 
     return (
         <div className="tds-container">
             <div className="upload-section">
                 <input type="file" accept=".csv" onChange={handleFileUpload} />
                 <CSVLink data={csvData} headers={headers} filename={"billing_details.csv"} className="btn">Download CSV</CSVLink>
-                <button onClick={generatePDF}>Generate PDF</button>
             </div>
             <div className="entry-section">
                 <h2>{selectedEntryIndex !== null ? 'Edit Entry' : 'Add Entry'}</h2>
@@ -224,6 +186,8 @@ const BillingDetails = () => {
                     <input type="number" name="tdsPercent" value={newEntry.tdsPercent} onChange={handleChange} placeholder="TDS %" />
                     <button type="button" onClick={handleAddEntry}>{selectedEntryIndex !== null ? 'Update' : 'Add'}</button>
                 </form>
+
+                <button onClick={goTohome}>home</button>
             </div>
             <div className="data-section">
                 <h2>Billing Data</h2>
