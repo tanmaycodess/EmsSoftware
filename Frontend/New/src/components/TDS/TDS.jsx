@@ -21,23 +21,30 @@ const BillingDetails = () => {
     useEffect(() => {
         if (isPasswordProtected) {
             Swal.fire({
-                title: 'Enter Password',
+                title: 'Enter password',
                 input: 'password',
-                inputLabel: 'Password',
-                inputPlaceholder: 'Enter your password',
-                confirmButtonText: 'Submit',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
                 showCancelButton: true,
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    if (result.value === correctPassword) {
-                        setIsPasswordProtected(false);
+                confirmButtonText: 'Submit',
+                showLoaderOnConfirm: true,
+                preConfirm: (password) => {
+                    if (password === correctPassword) {
+                        return true;
                     } else {
-                        Swal.fire('Incorrect password', '', 'error');
-                        navigate('/home');
+                        Swal.showValidationMessage('Incorrect password');
+                        return false;
                     }
                 }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    setIsPasswordProtected(false);
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    window.location.href = '/home'; // Redirect if the user cancels the prompt
+                }
             });
+
         } else {
             const fetchTdsRecords = async () => {
                 try {
