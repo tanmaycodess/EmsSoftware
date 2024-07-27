@@ -174,12 +174,12 @@ const BillingDetails = () => {
                     <input type="text" name="month" value={newEntry.month} onChange={handleChange} placeholder="Month" />
                     <input type="text" name="code" value={newEntry.code} onChange={handleChange} placeholder="Code" />
                     <input type="text" name="typeOfPayment" value={newEntry.typeOfPayment} onChange={handleChange} placeholder="Type of Payment" />
-                    <select name="partyName" value={newEntry.partyName} onChange={handleSelectName}>
-                        <option value="">Select Party Name</option>
+                    <input list="partyNames" name="partyName" value={newEntry.partyName} onChange={handleSelectName} placeholder="Party Name" />
+                    <datalist id="partyNames">
                         {persons.map(person => (
                             <option key={person.partyName} value={person.partyName}>{person.partyName}</option>
                         ))}
-                    </select>
+                    </datalist>
                     <input type="text" name="panNo" value={newEntry.panNo} onChange={handleChange} placeholder="PAN NO" />
                     <input type="date" name="billDate" value={newEntry.billDate} onChange={handleChange} placeholder="Bill Date" />
                     <input type="number" name="billAmt" value={newEntry.billAmt} onChange={handleChange} placeholder="Bill Amt" />
