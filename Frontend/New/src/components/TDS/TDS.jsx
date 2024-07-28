@@ -19,7 +19,10 @@ const BillingDetails = () => {
     const correctPassword = 'password'; // Change this to your desired password
 
     useEffect(() => {
-        if (isPasswordProtected) {
+        const passwordStatus = localStorage.getItem('passwordStatus');
+        if (passwordStatus === 'unlocked') {
+            setIsPasswordProtected(false);
+        } else {
             Swal.fire({
                 title: 'Enter password',
                 input: 'password',
@@ -31,6 +34,7 @@ const BillingDetails = () => {
                 showLoaderOnConfirm: true,
                 preConfirm: (password) => {
                     if (password === correctPassword) {
+                        localStorage.setItem('passwordStatus', 'unlocked');
                         return true;
                     } else {
                         Swal.showValidationMessage('Incorrect password');
@@ -44,18 +48,23 @@ const BillingDetails = () => {
                     window.location.href = '/home'; // Redirect if the user cancels the prompt
                 }
             });
+        }
 
-        } else {
-            const fetchTdsRecords = async () => {
-                try {
-                    const response = await axios.get('https://emssoftware-backend.onrender.com/tds');
-                    setPersons(response.data);
-                } catch (error) {
-                    console.error('Error fetching TDS records:', error);
-                }
-            };
+        const fetchTdsRecords = async () => {
+            try {
+                const response = await axios.get('https://emssoftware-backend.onrender.com/tds');
+                setPersons(response.data);
+            } catch (error) {
+                console.error('Error fetching TDS records:', error);
+            }
+        };
 
-            fetchTdsRecords();
+        fetchTdsRecords();
+
+        // Load data from localStorage
+        const savedBillingData = JSON.parse(localStorage.getItem('billingData'));
+        if (savedBillingData) {
+            setBillingData(savedBillingData);
         }
     }, [isPasswordProtected]);
 
@@ -70,15 +79,17 @@ const BillingDetails = () => {
     };
 
     const handleAddEntry = () => {
+        let updatedData;
         if (selectedEntryIndex !== null) {
-            const updatedData = billingData.map((entry, index) =>
+            updatedData = billingData.map((entry, index) =>
                 index === selectedEntryIndex ? newEntry : entry
             );
-            setBillingData(updatedData);
             setSelectedEntryIndex(null);
         } else {
-            setBillingData([...billingData, newEntry]);
+            updatedData = [...billingData, newEntry];
         }
+        setBillingData(updatedData);
+        localStorage.setItem('billingData', JSON.stringify(updatedData)); // Save to localStorage
         setNewEntry({
             month: '', code: '', typeOfPayment: '', partyName: '', panNo: '', billDate: '', billAmt: '', tdsPercent: ''
         });
@@ -87,6 +98,7 @@ const BillingDetails = () => {
     const handleDeleteEntry = (index) => {
         const updatedData = billingData.filter((_, i) => i !== index);
         setBillingData(updatedData);
+        localStorage.setItem('billingData', JSON.stringify(updatedData)); // Save to localStorage
     };
 
     const handleEditEntry = (index) => {
@@ -115,6 +127,7 @@ const BillingDetails = () => {
                     totalAmt: parseFloat(row['Total Amt'])
                 }));
                 setBillingData(data);
+                localStorage.setItem('billingData', JSON.stringify(data)); // Save to localStorage
             }
         });
     };
@@ -165,6 +178,11 @@ const BillingDetails = () => {
         navigate('/home');
     }
 
+    const handleLogout = () => {
+        localStorage.removeItem('passwordStatus');
+        window.location.href = '/home'; // Redirect to home or login page
+    };
+
     if (isPasswordProtected) {
         return null; // Return null or a loading spinner while the password is being checked
     }
@@ -191,37 +209,57 @@ const BillingDetails = () => {
                     <input type="date" name="billDate" value={newEntry.billDate} onChange={handleChange} placeholder="Bill Date" />
                     <input type="number" name="billAmt" value={newEntry.billAmt} onChange={handleChange} placeholder="Bill Amt" />
                     <input type="number" name="tdsPercent" value={newEntry.tdsPercent} onChange={handleChange} placeholder="TDS %" />
-                    <button type="button" onClick={handleAddEntry}>{selectedEntryIndex !== null ? 'Update' : 'Add'}</button>
+                    <button type="button" onClick={handleAddEntry}>{selectedEntryIndex !== null ? 'Update Entry' : 'Add Entry'}</button>
                 </form>
-
-                <button onClick={goTohome}>home</button>
             </div>
-            <div className="data-section">
-                <h2>Billing Data</h2>
+            <div className="table-section">
+                <h2>Billing Details</h2>
                 <table>
                     <thead>
                         <tr>
-                            {headers.map(header => (
-                                <th key={header.key}>{header.label}</th>
-                            ))}
+                            <th>Sr No</th>
+                            <th>Month</th>
+                            <th>Code</th>
+                            <th>Type of Payment</th>
+                            <th>Party Name</th>
+                            <th>PAN NO</th>
+                            <th>Bill Date</th>
+                            <th>Bill Amt</th>
+                            <th>TDS %</th>
+                            <th>TDS Amt</th>
+                            <th>Total Amt</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {csvData.map((entry, index) => (
-                            <tr key={index}>
-                                {headers.map(header => (
-                                    <td key={header.key}>{entry[header.key]}</td>
-                                ))}
-                                <td>
-                                    <button onClick={() => handleEditEntry(index)}>Edit</button>
-                                    <button onClick={() => handleDeleteEntry(index)}>Delete</button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
+                        {billingData.map((entry, index) => {
+                            const tdsAmt = calculateTDSAmount(entry.billAmt, entry.tdsPercent);
+                            const totalAmt = calculateTotalAmount(entry.billAmt, tdsAmt);
+                            return (
+                                <tr key={index}>
+                                    <td>{index + 1}</td>
+                                    <td>{entry.month}</td>
+                                    <td>{entry.code}</td>
+                                    <td>{entry.typeOfPayment}</td>
+                                    <td>{entry.partyName}</td>
+                                    <td>{entry.panNo}</td>
+                                    <td>{entry.billDate}</td>
+                                    <td>{parseFloat(entry.billAmt).toFixed(2)}</td>
+                                    <td>{parseFloat(entry.tdsPercent).toFixed(2)}</td>
+                                    <td>{tdsAmt.toFixed(2)}</td>
+                                    <td>{totalAmt.toFixed(2)}</td>
+                                    <td>
+                                        <button onClick={() => handleEditEntry(index)}>Edit</button>
+                                        <button onClick={() => handleDeleteEntry(index)}>Delete</button>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>gi
                 </table>
             </div>
+            <button onClick={goTohome}>Back to Home</button>
+            <button onClick={handleLogout}>Logout</button>
         </div>
     );
 };
