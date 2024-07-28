@@ -178,11 +178,6 @@ const BillingDetails = () => {
         navigate('/home');
     }
 
-    const handleLogout = () => {
-        localStorage.removeItem('passwordStatus');
-        window.location.href = '/home'; // Redirect to home or login page
-    };
-
     if (isPasswordProtected) {
         return null; // Return null or a loading spinner while the password is being checked
     }
@@ -255,11 +250,10 @@ const BillingDetails = () => {
                                 </tr>
                             );
                         })}
-                    </tbody>gi
+                    </tbody>
                 </table>
             </div>
             <button onClick={goTohome}>Back to Home</button>
-            <button onClick={handleLogout}>Logout</button>
         </div>
     );
 };
