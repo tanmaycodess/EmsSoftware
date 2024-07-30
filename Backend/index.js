@@ -11,6 +11,7 @@ import { fileURLToPath } from 'url';
 import { type } from 'os';
 
 
+
 dotenv.config();
 
 const app = express();
@@ -180,7 +181,6 @@ tdsSchema.plugin(AutoIncrement, { inc_field: 'tdsId' });
 
 const TDS = mongoose.model('TDS', tdsSchema);
 
-
 // JWT token generation function
 function generateTokenForUser(userEmail) {
     const token = jwt.sign({ email: userEmail }, process.env.JWT_SECRET || 'your_secret_key', { expiresIn: '1d' });
@@ -191,13 +191,22 @@ function generateTokenForUser(userEmail) {
 app.post('/tds', async (req, res) => {
     try {
         const { partyName, panCardNo, refrence } = req.body;
+
+        // Check if PAN Card number already exists
+        const existingRecord = await TDS.findOne({ panCardNo });
+        if (existingRecord) {
+            return res.status(400).json({ message: 'PAN Card number already exists' });
+        }
+
+        // Save the new TDS record
         const newTDS = new TDS({ partyName, panCardNo, refrence });
         const savedTDS = await newTDS.save();
         res.status(201).json(savedTDS);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 });
+
 
 // Endpoint to fetch all TDS records
 app.get('/tds', async (req, res) => {
@@ -214,19 +223,30 @@ app.put('/tds/:tdsId', async (req, res) => {
     try {
         const { tdsId } = req.params;
         const { partyName, panCardNo, refrence } = req.body;
+
+        // Check if another record with the same PAN Card number exists
+        const existingRecord = await TDS.findOne({ panCardNo, tdsId: { $ne: parseInt(tdsId, 10) } });
+        if (existingRecord) {
+            return res.status(400).json({ message: 'PAN Card number already exists' });
+        }
+
+        // Update the record if no duplicate is found
         const updatedTDS = await TDS.findOneAndUpdate(
             { tdsId: parseInt(tdsId, 10) },
             { partyName, panCardNo, refrence },
             { new: true }
         );
+
         if (!updatedTDS) {
             return res.status(404).json({ message: 'TDS record not found' });
         }
+
         res.status(200).json(updatedTDS);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
+
 
 // Endpoint to delete a TDS record by ID
 app.delete('/tds/:tdsId', async (req, res) => {

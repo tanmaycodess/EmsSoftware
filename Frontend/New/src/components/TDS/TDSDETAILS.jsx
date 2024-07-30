@@ -1,4 +1,3 @@
-// src/components/TDSForm.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -27,8 +26,18 @@ const TDSForm = () => {
         fetchTdsRecords();
     }, []);
 
+    const isPanCardUnique = (panCardNo) => {
+        return !tdsRecords.some(record => record.panCardNo === panCardNo);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!isPanCardUnique(panCardNo) && !editMode) {
+            Swal.fire('Error!', 'PAN Card number already exists.', 'error');
+            return;
+        }
+
         if (editMode && currentRecord) {
             const result = await Swal.fire({
                 title: 'Are you sure?',
