@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const BillingDetails = () => {
     const [billingData, setBillingData] = useState([]);
     const [newEntry, setNewEntry] = useState({
-        month: '', code: '', typeOfPayment: '', partyName: '', panNo: '', billDate: '', billAmt: '', tdsPercent: ''
+        month: '', code: '', typeOfPayment: 'Professional Tax', partyName: '', panNo: '', billDate: '', billAmt: '', tdsPercent: 10
     });
     const [persons, setPersons] = useState([]);
     const [selectedEntryIndex, setSelectedEntryIndex] = useState(null);
@@ -91,7 +91,7 @@ const BillingDetails = () => {
         setBillingData(updatedData);
         localStorage.setItem('billingData', JSON.stringify(updatedData)); // Save to localStorage
         setNewEntry({
-            month: '', code: '', typeOfPayment: '', partyName: '', panNo: '', billDate: '', billAmt: '', tdsPercent: ''
+            month: '', code: '', typeOfPayment: 'Professional Tax', partyName: '', panNo: '', billDate: '', billAmt: '', tdsPercent: 10
         });
     };
 
@@ -128,8 +128,28 @@ const BillingDetails = () => {
                 }));
                 setBillingData(data);
                 localStorage.setItem('billingData', JSON.stringify(data)); // Save to localStorage
+
+                // Now upload the file to the server
+                uploadFile(file);
             }
         });
+    };
+
+    const uploadFile = async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('month', newEntry.month); // Adjust as needed based on your requirements
+
+        try {
+            await axios.post('http://localhost:5/upload-csv', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            Swal.fire('Success', 'CSV file uploaded successfully!', 'success');
+        } catch (error) {
+            Swal.fire('Error', 'Failed to upload CSV file', 'error');
+        }
     };
 
     const calculateTDSAmount = (billAmt, tdsPercent) => {
@@ -185,8 +205,10 @@ const BillingDetails = () => {
     return (
         <div className="tds-container">
             <div className="upload-section">
-                <input type="file" accept=".csv" onChange={handleFileUpload} />
-                <CSVLink data={csvData} headers={headers} filename={"billing_details.csv"} className="btn">Download CSV</CSVLink>
+                <form encType="multipart/form-data">
+                    <input type="file" accept=".csv" onChange={handleFileUpload} />
+                    <CSVLink data={csvData} headers={headers} filename={"billing_details.csv"} className="btn">Download CSV</CSVLink>
+                </form>
             </div>
             <div className="entry-section">
                 <h2>{selectedEntryIndex !== null ? 'Edit Entry' : 'Add Entry'}</h2>
@@ -196,19 +218,16 @@ const BillingDetails = () => {
                     <input type="text" name="typeOfPayment" value={newEntry.typeOfPayment} onChange={handleChange} placeholder="Type of Payment" />
                     <input list="partyNames" name="partyName" value={newEntry.partyName} onChange={handleSelectName} placeholder="Party Name" />
                     <datalist id="partyNames">
-                        {persons.map(person => (
-                            <option key={person.partyName} value={person.partyName}>{person.partyName}</option>
+                        {persons.map((person, index) => (
+                            <option key={index} value={person.partyName} />
                         ))}
                     </datalist>
-                    <input type="text" name="panNo" value={newEntry.panNo} onChange={handleChange} placeholder="PAN NO" />
+                    <input type="text" name="panNo" value={newEntry.panNo} onChange={handleChange} placeholder="PAN No" />
                     <input type="date" name="billDate" value={newEntry.billDate} onChange={handleChange} placeholder="Bill Date" />
-                    <input type="number" name="billAmt" value={newEntry.billAmt} onChange={handleChange} placeholder="Bill Amt" />
+                    <input type="number" name="billAmt" value={newEntry.billAmt} onChange={handleChange} placeholder="Bill Amount" />
                     <input type="number" name="tdsPercent" value={newEntry.tdsPercent} onChange={handleChange} placeholder="TDS %" />
                     <button type="button" onClick={handleAddEntry}>{selectedEntryIndex !== null ? 'Update Entry' : 'Add Entry'}</button>
                 </form>
-            </div>
-            <div className="table-section">
-                <h2>Billing Details</h2>
                 <table>
                     <thead>
                         <tr>
@@ -217,30 +236,30 @@ const BillingDetails = () => {
                             <th>Code</th>
                             <th>Type of Payment</th>
                             <th>Party Name</th>
-                            <th>PAN NO</th>
+                            <th>PAN No</th>
                             <th>Bill Date</th>
-                            <th>Bill Amt</th>
+                            <th>Bill Amount</th>
                             <th>TDS %</th>
-                            <th>TDS Amt</th>
-                            <th>Total Amt</th>
+                            <th>TDS Amount</th>
+                            <th>Total Amount</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {billingData.map((entry, index) => {
-                            const tdsAmt = calculateTDSAmount(entry.billAmt, entry.tdsPercent);
-                            const totalAmt = calculateTotalAmount(entry.billAmt, tdsAmt);
+                        {billingData.map((data, index) => {
+                            const tdsAmt = calculateTDSAmount(data.billAmt, data.tdsPercent);
+                            const totalAmt = calculateTotalAmount(data.billAmt, tdsAmt);
                             return (
                                 <tr key={index}>
                                     <td>{index + 1}</td>
-                                    <td>{entry.month}</td>
-                                    <td>{entry.code}</td>
-                                    <td>{entry.typeOfPayment}</td>
-                                    <td>{entry.partyName}</td>
-                                    <td>{entry.panNo}</td>
-                                    <td>{entry.billDate}</td>
-                                    <td>{parseFloat(entry.billAmt).toFixed(2)}</td>
-                                    <td>{parseFloat(entry.tdsPercent).toFixed(2)}</td>
+                                    <td>{data.month}</td>
+                                    <td>{data.code}</td>
+                                    <td>{data.typeOfPayment}</td>
+                                    <td>{data.partyName}</td>
+                                    <td>{data.panNo}</td>
+                                    <td>{data.billDate}</td>
+                                    <td>{parseFloat(data.billAmt).toFixed(2)}</td>
+                                    <td>{parseFloat(data.tdsPercent).toFixed(2)}</td>
                                     <td>{tdsAmt.toFixed(2)}</td>
                                     <td>{totalAmt.toFixed(2)}</td>
                                     <td>
@@ -253,7 +272,7 @@ const BillingDetails = () => {
                     </tbody>
                 </table>
             </div>
-            <button onClick={goTohome}>Back to Home</button>
+            <button onClick={goTohome}>Go to Home</button>
         </div>
     );
 };
